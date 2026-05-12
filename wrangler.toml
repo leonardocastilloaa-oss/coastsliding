@@ -1,4 +1,5 @@
 name = "coastsliding"
+main = "src/worker.js"
 compatibility_date = "2026-05-12"
 
 [observability]
@@ -6,9 +7,11 @@ enabled = true
 
 [assets]
 directory = "."
+binding = "ASSETS"
 exclude = [
   "_worker.js",
   "**/_worker.js",
+  "src/**",
   ".git/**",
   ".wrangler/**",
   "node_modules/**"
