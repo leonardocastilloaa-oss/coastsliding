@@ -1,0 +1,15 @@
+name = "coastsliding"
+compatibility_date = "2026-05-12"
+
+[observability]
+enabled = true
+
+[assets]
+directory = "."
+exclude = [
+  "_worker.js",
+  "**/_worker.js",
+  ".git/**",
+  ".wrangler/**",
+  "node_modules/**"
+]
