@@ -325,6 +325,43 @@
     });
   }
 
+  function resolveNumberedPhotos() {
+    var extensions = ['avif', 'webp', 'png', 'jpeg', 'jpg'];
+    var cache = {};
+
+    function canLoad(url) {
+      if (!cache[url]) {
+        cache[url] = new Promise(function (resolve) {
+          var img = new Image();
+          img.onload = function () { resolve(true); };
+          img.onerror = function () { resolve(false); };
+          img.src = url + (url.indexOf('?') === -1 ? '?' : '&') + 'v=photos';
+        });
+      }
+      return cache[url];
+    }
+
+    document.querySelectorAll('img[src*="/images/"], img[src*="images/"]').forEach(function (img) {
+      var src = img.getAttribute('src') || '';
+      var match = src.match(/^(.*\/images\/)(\d+)\.(?:jpg|jpeg|png|webp|avif)(\?.*)?$/i);
+      if (!match) return;
+
+      var base = match[1];
+      var number = match[2];
+      var current = src.split('?')[0];
+      var candidates = extensions.map(function (ext) { return base + number + '.' + ext; });
+
+      (async function () {
+        for (var i = 0; i < candidates.length; i += 1) {
+          if (await canLoad(candidates[i])) {
+            if (current !== candidates[i]) img.src = candidates[i];
+            return;
+          }
+        }
+      })();
+    });
+  }
+
   function ensureMainLandmark() {
     if (document.querySelector('main, [role="main"]')) return;
     var body = document.body;
@@ -368,6 +405,7 @@
 
   document.addEventListener('DOMContentLoaded', function () {
     ensureMainLandmark();
+    resolveNumberedPhotos();
     normalizePhones();
     prepareForms();
     wireContactForms();
