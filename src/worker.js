@@ -1,9 +1,6 @@
-import { EmailMessage } from "cloudflare:email";
-
 const PRIMARY_HOST = 'coastslide.com';
 const OLD_HOSTS = new Set(['coastsliding.com', 'www.coastsliding.com', 'www.coastslide.com']);
 const CONTACT_EMAIL = 'coastsliding@gmail.com';
-const FROM_EMAIL = 'noreply@coastslide.com';
 
 const REPLACEMENTS = [
   [/https:\/\/coastsliding\.com/g, 'https://coastslide.com'],
@@ -20,11 +17,45 @@ const REPLACEMENTS = [
   [/305-555-7543/g, '786-659-3290'],
   [/954-555-7543/g, '786-659-3290'],
   [/561-555-7543/g, '786-659-3290'],
-  [/305\.555\.7543/g, '786.659.3290']
+  [/305\.555\.7543/g, '786.659.3290'],
+  [/\s*link\('pages\/florida-keys\.html', 'Florida Keys'\) \+/g, ''],
+  [/\s*mob\('pages\/florida-keys\.html', 'Florida Keys'\) \+/g, ''],
+  [/var extensions = \['avif', 'webp', 'png', 'jpeg', 'jpg', 'AVIF', 'WEBP', 'PNG', 'JPEG', 'JPG'\];/g,
+    "var extensions = ['AVIF', 'WEBP', 'PNG', 'JPEG', 'JPG', 'avif', 'webp', 'png', 'jpeg', 'jpg'];"],
+  [/\['miami', 'broward', 'palm', 'keys'\]/g, "['miami', 'broward', 'palm']"],
+  [/<option>Florida Keys<\/option>/g, ''],
+  [/Miami-Dade, Broward, Palm Beach and the Florida Keys/g, 'Miami-Dade, Broward and Palm Beach'],
+  [/Miami-Dade, Broward, and Palm Beach counties from Homestead to Jupiter — plus the Florida Keys/g, 'Miami-Dade, Broward and Palm Beach counties from Homestead to Jupiter']
 ];
 
-function normalizeText(text) {
-  return REPLACEMENTS.reduce((value, pair) => value.replace(pair[0], pair[1]), text);
+const DESIGN_FIX_CSS = `
+<style id="cs-worker-fixes">
+.region-tabs{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:24px;align-items:center}
+.rtab{min-height:44px;white-space:nowrap}
+.rpanel.active{display:grid;grid-template-columns:minmax(0,1fr) minmax(340px,1fr);align-items:stretch}
+.rp-photo{min-height:520px;background:#073047}
+.rp-photo-content{padding:42px 34px;gap:10px}
+.rp-stats{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.rp-stat{min-width:0;padding:14px 12px;background:rgba(0,30,55,.48);border-color:rgba(255,255,255,.38)}
+.rp-stat-n{font-size:clamp(18px,2vw,22px);line-height:1.05;white-space:nowrap;overflow-wrap:normal;color:#fff!important;text-shadow:0 2px 8px rgba(0,0,0,.35)}
+.rp-stat-l{font-size:9px;line-height:1.25;color:#fff!important;opacity:.92!important;letter-spacing:.7px;overflow-wrap:anywhere}
+.rp-tag,.rp-city{color:#fff!important;text-shadow:0 1px 5px rgba(0,0,0,.32)}
+.contact-info-phones{gap:12px}
+.phone-card{min-width:0;overflow:hidden;align-items:center}
+.phone-card>div:last-child{min-width:0;flex:1}
+.pc-area{color:#355064!important;line-height:1.25;letter-spacing:1px;white-space:normal}
+.pc-num{font-size:clamp(17px,2.2vw,20px);line-height:1.15;white-space:nowrap;color:#0f2230!important}
+.btn-wa .pc-area,.btn-wa .pc-num{color:#fff!important}
+@media(max-width:860px){.rpanel.active{grid-template-columns:1fr}.rp-photo{min-height:420px}.rp-stats{grid-template-columns:1fr 1fr}.rp-photo-content{padding:30px 22px}.phone-card{padding:14px 16px}.pc-num{font-size:17px}}
+@media(max-width:520px){.rp-stats{grid-template-columns:1fr}.rp-stat-n{white-space:normal}.region-tabs{gap:8px}.rtab{flex:1 1 100%;justify-content:center}.photo-strip{grid-template-columns:1fr!important}}
+</style>`;
+
+function normalizeText(text, contentType = '') {
+  let value = REPLACEMENTS.reduce((current, pair) => current.replace(pair[0], pair[1]), text);
+  if (/text\/html/i.test(contentType) && !value.includes('cs-worker-fixes')) {
+    value = value.replace('</head>', DESIGN_FIX_CSS + '</head>');
+  }
+  return value;
 }
 
 function shouldRewrite(contentType) {
@@ -80,32 +111,6 @@ function leadBody(lead) {
   ].join('\n');
 }
 
-function emailRaw(lead) {
-  const subject = 'New CoastSlide Contact Request';
-  const replyTo = lead.email.replace(/[<>\r\n]/g, '');
-  return [
-    'From: CoastSlide Website <' + FROM_EMAIL + '>',
-    'To: CoastSlide Leads <' + CONTACT_EMAIL + '>',
-    'Reply-To: ' + replyTo,
-    'Subject: ' + subject,
-    'MIME-Version: 1.0',
-    'Content-Type: text/plain; charset=UTF-8',
-    'Content-Transfer-Encoding: 8bit',
-    '',
-    leadBody(lead)
-  ].join('\r\n');
-}
-
-async function sendLeadWithCloudflare(lead, env) {
-  if (!env.LEAD_EMAIL || typeof env.LEAD_EMAIL.send !== 'function') {
-    return { ok: false, skipped: true, message: 'Missing Cloudflare Email binding' };
-  }
-
-  const message = new EmailMessage(FROM_EMAIL, CONTACT_EMAIL, emailRaw(lead));
-  await env.LEAD_EMAIL.send(message);
-  return { ok: true };
-}
-
 async function sendLeadWithFormSubmit(lead) {
   const payload = {
     _subject: 'New CoastSlide Contact Request',
@@ -124,28 +129,16 @@ async function sendLeadWithFormSubmit(lead) {
 
   const response = await fetch('https://formsubmit.co/ajax/' + CONTACT_EMAIL, {
     method: 'POST',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    },
+    headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
     body: JSON.stringify(payload)
   });
 
   let result = {};
-  try {
-    result = await response.json();
-  } catch (error) {
-    result = { success: String(response.ok), message: 'No JSON response from email service' };
-  }
-
-  return {
-    ok: response.ok && String(result.success).toLowerCase() === 'true',
-    status: response.status,
-    result
-  };
+  try { result = await response.json(); } catch (error) { result = { success: String(response.ok), message: 'No JSON response from email service' }; }
+  return { ok: response.ok && String(result.success).toLowerCase() === 'true', status: response.status, result };
 }
 
-async function handleContact(request, env) {
+async function handleContact(request) {
   if (request.method === 'OPTIONS') return json({ ok: true });
   if (request.method !== 'POST') return json({ ok: false, error: 'Method not allowed' }, 405);
 
@@ -153,21 +146,12 @@ async function handleContact(request, env) {
   if (clean(form.get('company'))) return json({ ok: true });
 
   const lead = buildLead(form, request);
-  if (!lead.name || !lead.phone || !lead.email || !lead.problem) {
-    return json({ ok: false, error: 'missing_required_fields' }, 400);
-  }
+  if (!lead.name || !lead.phone || !lead.email || !lead.problem) return json({ ok: false, error: 'missing_required_fields' }, 400);
 
-  try {
-    const cloudflareDelivery = await sendLeadWithCloudflare(lead, env);
-    if (cloudflareDelivery.ok) return json({ ok: true, delivery: 'cloudflare_email' });
-  } catch (error) {
-    console.log('Cloudflare Email failed:', error && error.message ? error.message : error);
-  }
+  const delivery = await sendLeadWithFormSubmit(lead);
+  if (delivery.ok) return json({ ok: true, delivery: 'formsubmit' });
 
-  const formSubmitDelivery = await sendLeadWithFormSubmit(lead);
-  if (formSubmitDelivery.ok) return json({ ok: true, delivery: 'formsubmit' });
-
-  const message = clean(formSubmitDelivery.result && formSubmitDelivery.result.message);
+  const message = clean(delivery.result && delivery.result.message);
   const activationRequired = /activation/i.test(message);
   return json({
     ok: false,
@@ -185,7 +169,7 @@ export default {
       return Response.redirect(url.toString(), 301);
     }
 
-    if (url.pathname === '/api/contact') return handleContact(request, env);
+    if (url.pathname === '/api/contact') return handleContact(request);
 
     const response = await env.ASSETS.fetch(request);
     const contentType = response.headers.get('content-type') || '';
@@ -195,7 +179,7 @@ export default {
     headers.delete('content-length');
     headers.set('cache-control', 'no-store, no-cache, must-revalidate, max-age=0');
 
-    return new Response(normalizeText(await response.text()), {
+    return new Response(normalizeText(await response.text(), contentType), {
       status: response.status,
       statusText: response.statusText,
       headers
