@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 520" width="700" height="520">
+  <defs>
+    <linearGradient id="pb_sky" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#5AB8E8"/><stop offset="100%" stop-color="#D0EEF8"/></linearGradient>
+    <linearGradient id="pb_glass" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#C8E8F8" stop-opacity="0.88"/><stop offset="100%" stop-color="#98C8E8" stop-opacity="0.68"/></linearGradient>
+    <linearGradient id="pb_floor" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#E8D8B0"/><stop offset="100%" stop-color="#C8B880"/></linearGradient>
+    <linearGradient id="pb_pool" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#30A8E0"/><stop offset="100%" stop-color="#1A78B0"/></linearGradient>
+  </defs>
+  <rect width="700" height="520" fill="url(#pb_sky)"/>
+
+  <!-- White luxury home exterior -->
+  <rect x="40" y="100" width="620" height="380" fill="#F5F0E8" stroke="#D8C890" stroke-width="2" rx="4"/>
+
+  <!-- Pool terrace -->
+  <rect x="40" y="380" width="620" height="100" fill="url(#pb_floor)"/>
+  <!-- Pool -->
+  <rect x="200" y="390" width="300" height="80" rx="10" fill="url(#pb_pool)" opacity="0.9"/>
+  <!-- Pool water shimmer -->
+  <path d="M200 405 Q250 395 300 405 Q350 415 400 405 Q450 395 500 405" fill="none" stroke="white" stroke-width="1.2" opacity="0.5"/>
+  <path d="M200 420 Q260 410 320 420 Q380 430 440 420 Q480 413 500 418" fill="none" stroke="white" stroke-width="1" opacity="0.35"/>
+
+  <!-- Large luxury sliding door system (3 panels) -->
+  <rect x="80" y="130" width="540" height="240" rx="5" fill="#D8C888" stroke="#C0A860" stroke-width="3"/>
+  <!-- Panel 1 -->
+  <rect x="88" y="138" width="165" height="224" rx="3" fill="url(#pb_glass)"/>
+  <rect x="95" y="148" width="22" height="140" rx="5" fill="white" opacity="0.32"/>
+  <!-- Panel 2 (center) -->
+  <rect x="268" y="138" width="165" height="224" rx="3" fill="url(#pb_glass)" opacity="0.92"/>
+  <rect x="275" y="148" width="22" height="140" rx="5" fill="white" opacity="0.35"/>
+  <!-- Panel 3 -->
+  <rect x="448" y="138" width="164" height="224" rx="3" fill="url(#pb_glass)"/>
+  <rect x="455" y="148" width="22" height="140" rx="5" fill="white" opacity="0.3"/>
+
+  <!-- Dividers -->
+  <rect x="253" y="130" width="15" height="240" rx="3" fill="#C0A860"/>
+  <rect x="433" y="130" width="15" height="240" rx="3" fill="#C0A860"/>
+
+  <!-- Premium handles (double) -->
+  <rect x="225" y="228" width="8" height="44" rx="4" fill="#D0B060"/>
+  <rect x="248" y="228" width="8" height="44" rx="4" fill="#D0B060"/>
+  <rect x="405" y="228" width="8" height="44" rx="4" fill="#D0B060"/>
+  <rect x="428" y="228" width="8" height="44" rx="4" fill="#D0B060"/>
+
+  <!-- Track and rollers -->
+  <rect x="78" y="368" width="544" height="10" rx="4" fill="#C0A860"/>
+  <circle cx="180" cy="373" r="7" fill="#E0C880" stroke="#B09048" stroke-width="1.5"/>
+  <circle cx="350" cy="373" r="7" fill="#E0C880" stroke="#B09048" stroke-width="1.5"/>
+  <circle cx="520" cy="373" r="7" fill="#E0C880" stroke="#B09048" stroke-width="1.5"/>
+
+  <!-- Palm trees -->
+  <rect x="22" y="300" width="10" height="240" fill="#4A7840" opacity="0.7"/>
+  <path d="M27 300 Q-10 255 -30 275 Q15 262 27 300 Z" fill="#5A9050" opacity="0.8"/>
+  <path d="M27 300 Q65 252 85 272 Q48 258 27 300 Z" fill="#5A9050" opacity="0.8"/>
+  <path d="M27 300 Q18 248 27 222 Q32 272 27 300 Z" fill="#6AA060" opacity="0.8"/>
+
+  <rect x="660" y="320" width="10" height="220" fill="#4A7840" opacity="0.7"/>
+  <path d="M665 320 Q625 275 608 295 Q650 280 665 320 Z" fill="#5A9050" opacity="0.75"/>
+  <path d="M665 320 Q705 272 722 292 Q688 278 665 320 Z" fill="#5A9050" opacity="0.75"/>
+
+  <!-- Text overlay -->
+  <rect x="0" y="468" width="700" height="52" fill="rgba(10,20,40,0.85)"/>
+  <text x="350" y="491" text-anchor="middle" font-family="Arial,sans-serif" font-size="20" font-weight="800" fill="white">Palm Beach County</text>
+  <text x="350" y="511" text-anchor="middle" font-family="Arial,sans-serif" font-size="12" fill="#90C8E8">White-Glove Service · NanaWall · LaCantina · Luxury Systems</text>
+</svg>

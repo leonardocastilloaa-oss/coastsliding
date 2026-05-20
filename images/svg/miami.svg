@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 520" width="700" height="520">
+  <defs>
+    <linearGradient id="miami_sky" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#2A70B8"/><stop offset="100%" stop-color="#90C8F0"/></linearGradient>
+    <linearGradient id="miami_ocean" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#1A80C0"/><stop offset="100%" stop-color="#0A5090"/></linearGradient>
+    <linearGradient id="miami_glass" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#D0E8F8" stop-opacity="0.8"/><stop offset="100%" stop-color="#A0C8E8" stop-opacity="0.6"/></linearGradient>
+  </defs>
+  <rect width="700" height="520" fill="url(#miami_sky)"/>
+  <!-- Ocean -->
+  <rect y="320" width="700" height="200" fill="url(#miami_ocean)"/>
+  <path d="M0 330 Q88 316 175 330 Q263 344 350 330 Q438 316 525 330 Q613 344 700 330" fill="none" stroke="white" stroke-width="1.5" opacity="0.4"/>
+  <path d="M0 360 Q100 346 200 360 Q300 374 400 360 Q500 346 600 360 Q650 353 700 358" fill="none" stroke="white" stroke-width="1" opacity="0.3"/>
+
+  <!-- Miami skyline -->
+  <rect x="0" y="200" width="700" height="120" fill="#1A3A58" opacity="0.4"/>
+  <!-- Buildings -->
+  <rect x="30" y="160" width="50" height="160" fill="#2A4A6A" opacity="0.7"/>
+  <rect x="90" y="120" width="65" height="200" fill="#2A5070" opacity="0.65"/>
+  <rect x="165" y="100" width="80" height="220" fill="#1A4060" opacity="0.7"/>
+  <rect x="255" y="80" width="55" height="240" fill="#2A4A6A" opacity="0.65"/>
+  <rect x="320" y="110" width="70" height="210" fill="#1A3A58" opacity="0.7"/>
+  <rect x="400" y="90" width="90" height="230" fill="#2A5070" opacity="0.65"/>
+  <rect x="500" y="70" width="60" height="250" fill="#1A4060" opacity="0.7"/>
+  <rect x="570" y="130" width="75" height="190" fill="#2A4A6A" opacity="0.65"/>
+  <rect x="655" y="150" width="45" height="170" fill="#1A3A58" opacity="0.7"/>
+  <!-- Building windows -->
+  <rect x="98" y="135" width="10" height="8" rx="1" fill="#E8C840" opacity="0.7"/>
+  <rect x="115" y="155" width="10" height="8" rx="1" fill="#E8C840" opacity="0.5"/>
+  <rect x="180" y="115" width="12" height="9" rx="1" fill="#E8C840" opacity="0.7"/>
+  <rect x="200" y="140" width="12" height="9" rx="1" fill="#A8D8F0" opacity="0.6"/>
+  <rect x="265" y="95" width="10" height="8" rx="1" fill="#E8C840" opacity="0.6"/>
+  <rect x="415" y="105" width="14" height="10" rx="1" fill="#E8C840" opacity="0.7"/>
+  <rect x="438" y="130" width="14" height="10" rx="1" fill="#A8D8F0" opacity="0.6"/>
+  <rect x="510" y="85" width="10" height="8" rx="1" fill="#E8C840" opacity="0.5"/>
+
+  <!-- Foreground: Large sliding door -->
+  <rect x="180" y="180" width="340" height="280" rx="6" fill="#1A4A6A" stroke="#2A7AA8" stroke-width="3"/>
+  <rect x="188" y="188" width="158" height="264" rx="3" fill="url(#miami_glass)"/>
+  <rect x="194" y="196" width="22" height="160" rx="5" fill="white" opacity="0.28"/>
+  <rect x="350" y="188" width="10" height="264" rx="3" fill="#1A5A80"/>
+  <rect x="360" y="188" width="152" height="264" rx="3" fill="url(#miami_glass)" opacity="0.9"/>
+  <rect x="367" y="196" width="22" height="160" rx="5" fill="white" opacity="0.32"/>
+  <rect x="484" y="290" width="8" height="40" rx="4" fill="#4A9ABE"/>
+  <!-- Track and rollers -->
+  <rect x="178" y="458" width="344" height="8" rx="3" fill="#1A4A6A"/>
+  <circle cx="260" cy="462" r="7" fill="#C0D8E8" stroke="#4A8AB0" stroke-width="1.5"/>
+  <circle cx="350" cy="462" r="7" fill="#C0D8E8" stroke="#4A8AB0" stroke-width="1.5"/>
+  <circle cx="440" cy="462" r="7" fill="#C0D8E8" stroke="#4A8AB0" stroke-width="1.5"/>
+
+  <!-- Text overlay -->
+  <rect x="0" y="468" width="700" height="52" fill="rgba(10,26,48,0.85)"/>
+  <text x="350" y="491" text-anchor="middle" font-family="Arial,sans-serif" font-size="20" font-weight="800" fill="white">Miami-Dade County</text>
+  <text x="350" y="511" text-anchor="middle" font-family="Arial,sans-serif" font-size="12" fill="#90C8E8">HVHZ Certified · 2–4hr Response · Bilingual EN/ES</text>
+</svg>

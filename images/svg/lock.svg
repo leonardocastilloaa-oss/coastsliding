@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="800" height="500">
+  <defs>
+    <linearGradient id="bg4" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#0A1A28"/><stop offset="100%" stop-color="#1A3050"/></linearGradient>
+    <linearGradient id="door4" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#BCD8F0" stop-opacity="0.8"/><stop offset="100%" stop-color="#8ABCE0" stop-opacity="0.6"/></linearGradient>
+    <linearGradient id="lockbody" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#4A5A68"/><stop offset="100%" stop-color="#2A3848"/></linearGradient>
+    <linearGradient id="lockshine" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#6A8090"/><stop offset="100%" stop-color="#90A8B8"/></linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#bg4)"/>
+
+  <!-- Door panels -->
+  <rect x="60" y="40" width="280" height="420" rx="4" fill="url(#door4)"/>
+  <rect x="460" y="40" width="280" height="420" rx="4" fill="url(#door4)" opacity="0.85"/>
+
+  <!-- Glass shine -->
+  <rect x="72" y="52" width="18" height="240" rx="9" fill="white" opacity="0.3"/>
+  <rect x="474" y="52" width="18" height="240" rx="9" fill="white" opacity="0.32"/>
+
+  <!-- Center frame -->
+  <rect x="340" y="40" width="20" height="420" rx="3" fill="#2A5A80"/>
+
+  <!-- OLD BROKEN LOCK mechanism (left door) -->
+  <g transform="translate(300, 210)">
+    <!-- Lock body -->
+    <rect x="-15" y="-30" width="30" height="45" rx="4" fill="#3A4A58"/>
+    <!-- Broken latch -->
+    <rect x="-4" y="10" width="20" height="8" rx="2" fill="#2A3848"/>
+    <path d="M4 12 Q10 14 8 18 Q6 22 12 20" stroke="#FF6B6B" stroke-width="2" fill="none"/>
+    <!-- Rust marks -->
+    <rect x="-12" y="-25" width="6" height="3" rx="1" fill="#8A4A20" opacity="0.7"/>
+    <rect x="5" y="-20" width="5" height="3" rx="1" fill="#8A4A20" opacity="0.6"/>
+    <!-- Red X -->
+    <text x="0" y="-40" text-anchor="middle" font-family="Arial" font-size="16" fill="#FF5555" font-weight="900">✗</text>
+    <text x="0" y="65" text-anchor="middle" font-family="Arial" font-size="11" fill="#FF6B6B" font-weight="700">BROKEN</text>
+  </g>
+
+  <!-- NEW LOCK mechanism (right door) -->
+  <g transform="translate(490, 210)">
+    <!-- Lock body -->
+    <rect x="-15" y="-30" width="32" height="50" rx="5" fill="url(#lockbody)"/>
+    <rect x="-13" y="-28" width="28" height="46" rx="4" fill="url(#lockshine)"/>
+    <!-- Shackle/arch -->
+    <path d="M-8 -30 Q-8 -50 0 -55 Q8 -50 8 -30" fill="none" stroke="#5A7A90" stroke-width="5" stroke-linecap="round"/>
+    <!-- Keyhole -->
+    <circle cx="1" cy="-5" r="6" fill="#1A2838"/>
+    <rect x="-2" y="-4" width="6" height="10" rx="3" fill="#1A2838"/>
+    <!-- Latch -->
+    <rect x="14" y="-4" width="18" height="10" rx="4" fill="#4A8AB0"/>
+    <rect x="15" y="-3" width="16" height="8" rx="3" fill="#5A9ABE"/>
+    <!-- Shine on lock -->
+    <rect x="-11" y="-26" width="8" height="30" rx="3" fill="white" opacity="0.15"/>
+    <!-- Green check -->
+    <text x="1" y="-68" text-anchor="middle" font-family="Arial" font-size="18" fill="#4ADE80" font-weight="900">✓</text>
+    <text x="1" y="42" text-anchor="middle" font-family="Arial" font-size="11" fill="#4ADE80" font-weight="700">SECURED</text>
+  </g>
+
+  <!-- Anti-lift pin illustration -->
+  <g transform="translate(600, 100)">
+    <rect x="-40" y="-15" width="80" height="12" rx="3" fill="#1B5A80"/>
+    <rect x="-5" y="-22" width="10" height="7" rx="2" fill="#2A8AB0"/>
+    <text x="0" y="12" text-anchor="middle" font-family="Arial" font-size="10" fill="#90C8E8">Anti-Lift Pin</text>
+  </g>
+
+  <rect x="0" y="420" width="800" height="80" fill="rgba(8,16,28,0.9)"/>
+  <text x="400" y="453" text-anchor="middle" font-family="Arial, sans-serif" font-size="22" font-weight="800" fill="white">Lock & Security Repair</text>
+  <text x="400" y="477" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="#90C8E8">Hook bolts · Multi-point locks · Anti-lift pins · Same-day service</text>
+</svg>
