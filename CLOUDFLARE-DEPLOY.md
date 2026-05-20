@@ -1,54 +1,56 @@
 # CoastSlide Cloudflare Deployment Notes
 
-## Recommended deployment path
+## Current production target
 
-Use Cloudflare Pages with GitHub or GitLab integration.
+Production domain: `https://coastslide.com`
 
-1. Put the `CoastSlide` folder in a Git repository.
-2. In Cloudflare, create a Pages project connected to that repository.
-3. Use these build settings:
-   - Framework preset: None
-   - Build command: empty
-   - Build output directory: `/` if the repository root is the site folder, or `CoastSlide` if the repository contains this folder.
-4. Add the custom domain `coastsliding.com`.
-5. Submit `https://coastsliding.com/sitemap.xml` in Google Search Console.
+Cloudflare is deploying this repository as a static Workers site with `npx wrangler deploy`.
 
-Cloudflare Pages will use:
+## Required Cloudflare settings
 
-- `_headers` for cache/security headers.
-- `_redirects` for simple redirects.
-- `robots.txt` for crawler access.
-- `sitemap.xml` for Google/Bing submission.
+Use these exact settings in the Cloudflare project:
 
-## Codex direct-update workflow
+- Repository: `leonardocastilloaa-oss/Coastsliding`
+- Branch: `main` or `cloudflare/workers-autoconfig` after both branches are synced
+- Build command: `npx wrangler deploy`
+- Build output directory: leave empty/default
 
-The best way for Codex to update the live site without manual uploads is:
+The root `wrangler.jsonc` must stay simple:
 
-1. Connect the site to a GitHub repository.
-2. Connect Cloudflare Pages to that same repository.
-3. Let Codex edit the repository and commit changes.
-4. Cloudflare automatically deploys every push.
-
-This gives version history, rollback, preview deployments, and no manual ZIP uploads.
-
-## Direct upload alternative
-
-Cloudflare Pages also supports direct upload with Wrangler:
-
-```bash
-npx wrangler pages deploy CoastSlide --project-name=coastsliding
+```json
+{
+  "name": "coastsliding",
+  "main": "src/worker.js",
+  "compatibility_date": "2026-05-12",
+  "assets": {
+    "directory": ".",
+    "binding": "ASSETS"
+  }
+}
 ```
 
-This requires a Cloudflare API token and account/project access. Git integration is recommended because it is safer and easier to automate.
+Do not add `assets.exclude`; Wrangler 4 warns on that field and may still scan the wrong assets. Files that should not be uploaded, including `.git`, are controlled by `.assetsignore`.
 
-## Blog automation
+## Current deploy fix
 
-Automated blog publishing is possible, but should be done carefully:
+The previous deploy error happened because Cloudflare scanned `.git/objects/pack/...`, which means the deploy was using an old config or ignoring the latest repo state. The current repository includes:
 
-- Use a content calendar.
-- Generate drafts first.
-- Review factual/local claims before publishing.
-- Commit approved posts to Git.
-- Let Cloudflare auto-deploy from Git.
+- `.assetsignore` excluding `.git`, `.wrangler`, `node_modules`, `src`, `_worker.js`, logs, ZIPs, and RARs.
+- `wrangler.jsonc` without unsupported `assets.exclude`.
+- `src/worker.js` serving the website through the assets binding.
 
-Publishing low-quality automated content can hurt SEO. The safer automation is weekly or biweekly high-quality drafts with human approval.
+If a new Cloudflare log still says `Unexpected fields found in assets field: "exclude"`, Cloudflare is not deploying the latest commit from this repository/branch.
+
+## Google files
+
+Submit this sitemap in Google Search Console:
+
+`https://coastslide.com/sitemap.xml`
+
+Robots file:
+
+`https://coastslide.com/robots.txt`
+
+## Update workflow
+
+Codex edits this GitHub repository directly. After every push, Cloudflare should create a new deployment automatically from the latest commit.
