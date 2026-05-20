@@ -8,14 +8,6 @@
   },
   "assets": {
     "directory": ".",
-    "binding": "ASSETS",
-    "exclude": [
-      "_worker.js",
-      "**/_worker.js",
-      "src/**",
-      ".git/**",
-      ".wrangler/**",
-      "node_modules/**"
-    ]
+    "binding": "ASSETS"
   }
 }
