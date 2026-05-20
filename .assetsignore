@@ -1,2 +1,17 @@
+# Cloudflare Workers static assets should only include public website files
+.git
+.git/**
+.wrangler
+.wrangler/**
+node_modules
+node_modules/**
+src
+src/**
 _worker.js
 **/_worker.js
+wrangler.jsonc
+package.json
+package-lock.json
+*.log
+*.zip
+*.rar
