@@ -2,6 +2,7 @@
   var PHONE_DISPLAY = '(786) 659-3290';
   var PHONE_TEL = '+17866593290';
   var PHONE_WA = '17866593290';
+  var PHONE_SMS = '+17866593290';
   var path = window.location.pathname;
   var ROOT = path.includes('/cities/') || path.includes('/blog/') ? '../../' : path.includes('/pages/') ? '../' : './';
 
@@ -19,7 +20,8 @@
       '.cta-section .title,.cta-section .title.white,.cta-section .title.white em,.cta-section .lead,.cta-section .lead.center,.cta-section .cta-lead,.cta-section .cta-phone-area,.cta-section .cta-phone-num,.cta-section .cta-note{color:#fff!important;opacity:1!important}' +
       '.cta-section .cta-lead{font-size:19px!important;font-weight:800!important;line-height:1.75!important;text-shadow:0 2px 8px rgba(0,0,0,.35)}' +
       '.cta-section .cta-phone{background:rgba(255,255,255,.20)!important;border-color:rgba(255,255,255,.55)!important;box-shadow:0 12px 36px rgba(0,0,0,.22)!important}' +
-      '.cta-section .cta-phone:hover{background:rgba(255,255,255,.30)!important}';
+      '.cta-section .cta-phone:hover{background:rgba(255,255,255,.30)!important}' +
+      '.cs-sms-float:hover{background:#0B628D!important;color:#fff!important}';
     document.head.appendChild(style);
   }
 
@@ -32,7 +34,7 @@
   }
 
   function city(slug, name, county) {
-    return '<a href="' + ROOT + 'pages/cities/' + slug + '.html" class="mega-item"><span class="mi-icon" aria-hidden="true">&#9656;</span><div><div class="mi-name">' + name + '</div><div class="mi-desc">' + county + '</div></div></a>';
+    return '<a href="' + ROOT + 'pages/cities/' + slug + '.html" class="mega-item"><span class="mi-icon" aria-hidden="true">&#9656;</span><div><div class="mi-name">' + name + '</div><div class="mi-desc">' + (county || '') + '</div></div></a>';
   }
 
   function mob(href, text) {
@@ -75,7 +77,7 @@
       city('hollywood', 'Hollywood', 'Broward') + city('fort-lauderdale', 'Fort Lauderdale', 'Broward') +
       city('pembroke-pines', 'Pembroke Pines', 'Broward') + city('weston', 'Weston', 'Broward') +
       city('coral-springs', 'Coral Springs', 'Broward') + city('boca-raton', 'Boca Raton', 'Palm Beach') +
-      city('delray-beach', 'Delray Beach', 'Palm Beach') + city('west-palm-beach', 'West Palm Beach') +
+      city('delray-beach', 'Delray Beach', 'Palm Beach') + city('west-palm-beach', 'West Palm Beach', 'Palm Beach') +
       city('palm-beach-gardens', 'Palm Beach Gardens', 'Palm Beach') + city('jupiter', 'Jupiter', 'Palm Beach') +
       '</div></li>' +
       '<li>' + link('pages/blog.html', 'Blog') + '</li>' +
@@ -144,6 +146,17 @@
       '<p class="cta-note">Mon-Sat 7am-8pm &middot; Emergency 24/7 &middot; Text OK &middot; Se Habla Espa&ntilde;ol</p></div></div></section>';
   }
 
+  function ensureTextFloat() {
+    if (document.querySelector('.cs-sms-float')) return;
+    var sms = document.createElement('a');
+    sms.href = 'sms:' + PHONE_SMS + '?body=Hi%20CoastSlide%2C%20I%20need%20help%20with%20a%20sliding%20door%20or%20window.';
+    sms.className = 'cs-sms-float';
+    sms.setAttribute('aria-label', 'Send CoastSlide a text message');
+    sms.style.cssText = 'position:fixed;right:18px;bottom:18px;z-index:99999;display:inline-flex;align-items:center;gap:10px;padding:13px 18px;border-radius:999px;background:#073F5F;color:#fff;text-decoration:none;font-weight:900;font-size:14px;line-height:1;box-shadow:0 14px 36px rgba(4,47,73,.34);border:2px solid rgba(255,255,255,.9)';
+    sms.innerHTML = '<span aria-hidden="true" style="display:grid;place-items:center;width:24px;height:24px;border-radius:999px;background:#fff;color:#073F5F;font-size:14px">&#9993;</span><span>Text Us</span>';
+    document.body.appendChild(sms);
+  }
+
   function replacePhoneText(text) {
     return text.replace(/\+1-305-555-7543/g, PHONE_TEL).replace(/\+13055557543/g, PHONE_TEL)
       .replace(/13055557543/g, PHONE_WA).replace(/3055557543/g, PHONE_WA)
@@ -178,11 +191,24 @@
     });
     document.querySelectorAll('form').forEach(function (form, formIndex) {
       if (!form.id) form.id = 'contact-form-' + formIndex;
+      form.setAttribute('action', '/api/contact');
+      form.setAttribute('method', 'post');
+      form.setAttribute('accept-charset', 'UTF-8');
       if (!form.querySelector('input[name="company"]')) {
         var trap = document.createElement('input');
         trap.type = 'text'; trap.name = 'company'; trap.autocomplete = 'off'; trap.tabIndex = -1;
         trap.setAttribute('aria-hidden', 'true'); trap.style.cssText = 'position:absolute;left:-9999px;opacity:0';
         form.insertBefore(trap, form.firstChild);
+      }
+      if (!form.querySelector('[name="source_page"]')) {
+        var source = document.createElement('input');
+        source.type = 'hidden'; source.name = 'source_page'; source.value = window.location.href;
+        form.appendChild(source);
+      }
+      if (!form.querySelector('[name="problem"]')) {
+        var problem = document.createElement('input');
+        problem.type = 'hidden'; problem.name = 'problem'; problem.value = 'Website contact request';
+        form.appendChild(problem);
       }
       form.querySelectorAll('.form-field').forEach(function (field, fieldIndex) {
         var label = field.querySelector('label');
@@ -200,22 +226,34 @@
       form.dataset.csReady = '1';
       form.addEventListener('submit', async function (event) {
         event.preventDefault();
-        var btn = form.querySelector('button[type=submit]');
+        event.stopImmediatePropagation();
+        var btn = form.querySelector('button[type=submit],input[type=submit]');
         var status = form.querySelector('.form-success') || document.getElementById('form-success');
-        var original = btn ? btn.textContent : 'Send Request';
+        var original = btn ? (btn.textContent || btn.value || 'Send Request') : 'Send Request';
         if (status) { status.style.display = 'none'; status.classList.remove('form-error'); }
-        if (btn) { btn.textContent = 'Sending request...'; btn.disabled = true; }
+        if (btn) {
+          if (btn.tagName === 'INPUT') btn.value = 'Sending request...'; else btn.textContent = 'Sending request...';
+          btn.disabled = true;
+        }
         try {
           var response = await fetch('/api/contact', { method: 'POST', headers: { Accept: 'application/json' }, body: new FormData(form) });
-          if (!response.ok) throw new Error('Contact request failed');
-          if (btn) { btn.textContent = 'Sent. We will contact you shortly.'; btn.style.background = '#27AE60'; }
+          var result = {};
+          try { result = await response.json(); } catch (jsonError) {}
+          if (!response.ok || !result.ok) throw new Error('Contact request failed');
+          if (btn) {
+            if (btn.tagName === 'INPUT') btn.value = 'Sent'; else btn.textContent = 'Sent. We will contact you shortly.';
+            btn.style.background = '#27AE60';
+          }
           if (status) { status.textContent = 'Thank you. Your request was sent and CoastSlide will contact you shortly.'; status.style.display = 'block'; }
           form.reset();
         } catch (error) {
-          if (btn) { btn.textContent = original; btn.disabled = false; }
+          if (btn) {
+            if (btn.tagName === 'INPUT') btn.value = original; else btn.textContent = original;
+            btn.disabled = false;
+          }
           if (status) { status.textContent = 'The form could not be sent right now. Please call or text ' + PHONE_DISPLAY + '.'; status.classList.add('form-error'); status.style.display = 'block'; }
         }
-      });
+      }, true);
     });
   }
 
@@ -265,7 +303,7 @@
     var node = main.nextSibling;
     while (node && node !== footerNode) {
       var next = node.nextSibling;
-      if (node.nodeType !== 1 || (node.id !== 'mob-nav' && !node.classList.contains('mobile-nav') && !node.classList.contains('wa-float'))) main.appendChild(node);
+      if (node.nodeType !== 1 || (node.id !== 'mob-nav' && !node.classList.contains('mobile-nav') && !node.classList.contains('wa-float') && !node.classList.contains('cs-sms-float'))) main.appendChild(node);
       node = next;
     }
   }
@@ -295,6 +333,7 @@
   buildCta();
 
   document.addEventListener('DOMContentLoaded', function () {
+    ensureTextFloat();
     removeKeysContent();
     ensureMainLandmark();
     resolveNumberedPhotos();
