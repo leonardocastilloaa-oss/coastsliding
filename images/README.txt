@@ -1,23 +1,13 @@
-Photo upload folder for CoastSlide.
+Photo replacement guide
 
-Upload replacement photos here using the exact slot number used by the website.
+Every visible photo slot now uses a numbered file: 1 through 105.
+Replace the file with the same number to change that exact photo on the site.
+The extension can be JPG, JPEG, PNG, WebP, or AVIF.
+Example: 1.jpg, 1.png, 1.webp, and 1.jpeg all match photo slot 1.
+Use ../PHOTO-MAP.csv to see where each number appears.
 
-Examples:
-- 1.jpg = main homepage hero photo
-- 4.jpg = Impact Glass
-- 5.jpg = Lock & Security
-- 6.jpg = Window Repair
-
-Accepted extensions:
-- .jpg
-- .jpeg
-- .png
-- .webp
-- .avif
-
-Uppercase extensions also work, for example 4.JPG or 5.PNG.
-
-Important:
-- Keep the file inside this /images folder.
-- Use the same number shown in PHOTO-MAP.csv.
-- If an old placeholder exists with the same number, replace it with the real photo.
+Recommended image export:
+- JPG, JPEG, PNG, WebP, or AVIF using the same number
+- 1600px wide maximum for hero photos
+- 900px wide maximum for cards and blog images
+- Keep each file under 200 KB when possible
