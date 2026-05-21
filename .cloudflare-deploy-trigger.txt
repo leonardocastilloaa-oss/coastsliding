@@ -1,4 +1,4 @@
-Trigger deploy after PageSpeed image and cache optimization.
-Timestamp: 2026-05-20T22:30:00Z
-Worker commit: 12e9156e038a8757a9c81a0aa002295a5c4f41a3
-Changes: HTML-only rewriting, long cache for CSS/JS, deferred homepage images 2-10.
+Trigger deploy after direct PageSpeed fixes in source HTML.
+Timestamp: 2026-05-21T03:48:00Z
+Commit: 00cb314957cb221ff8f6d574aefa679a0f664c0b
+Changes: removed eager homepage image downloads, deferred CSS loading, deferred components script.
