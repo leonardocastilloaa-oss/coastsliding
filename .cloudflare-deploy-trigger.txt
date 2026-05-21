@@ -1,4 +1,4 @@
-Trigger deploy after real lazy photo source fix.
-Timestamp: 2026-05-21T04:20:00Z
-Commit: 22ffbf17e43a726a7e0ce7c4042c20d0f7fd9727
-Changes: Worker converts placeholder data-src photos into real /images src attributes with native lazy loading.
+Trigger deploy after direct photo loader fix.
+Timestamp: 2026-05-21T04:35:00Z
+Commit: e8382927bddaf153f10a23862fa429b6d71cb025
+Changes: components.js now converts homepage data-src placeholders into direct /images paths so photos display.
