@@ -1,4 +1,4 @@
-Trigger deploy after all numbered photo fix.
-Timestamp: 2026-05-21T04:45:00Z
-Commit: 0dc3e0197dfe7e5879bdb8925fc4db5d3bff542e
-Changes: components.js now fixes data-src placeholders and direct numbered image extensions including photo 1.
+Trigger deploy after contact phone block redesign.
+Timestamp: 2026-05-21T09:15:00Z
+Commit: 5dbd239a9cd40b5b1fc6bf11fd19ad53cea9c9f8
+Changes: Homepage Free Estimate section now shows one South Florida number instead of repeated county phone cards.
