@@ -1,4 +1,4 @@
-Trigger deploy after lazy image fallback fix.
-Timestamp: 2026-05-21T04:05:00Z
-Commit: 170e5e551646cfe8e6fca3b074acb650376adce5
-Changes: lazy photos fall back to direct /images paths when Cloudflare image resizing is unavailable.
+Trigger deploy after real lazy photo source fix.
+Timestamp: 2026-05-21T04:20:00Z
+Commit: 22ffbf17e43a726a7e0ce7c4042c20d0f7fd9727
+Changes: Worker converts placeholder data-src photos into real /images src attributes with native lazy loading.
