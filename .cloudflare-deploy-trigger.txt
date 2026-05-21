@@ -1,4 +1,4 @@
-Trigger deploy after direct photo loader fix.
-Timestamp: 2026-05-21T04:35:00Z
-Commit: e8382927bddaf153f10a23862fa429b6d71cb025
-Changes: components.js now converts homepage data-src placeholders into direct /images paths so photos display.
+Trigger deploy after all numbered photo fix.
+Timestamp: 2026-05-21T04:45:00Z
+Commit: 0dc3e0197dfe7e5879bdb8925fc4db5d3bff542e
+Changes: components.js now fixes data-src placeholders and direct numbered image extensions including photo 1.
