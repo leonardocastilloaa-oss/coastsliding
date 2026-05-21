@@ -15,6 +15,7 @@ const REPLACEMENTS = [
   [/https:\/\/coastsliding\.com/g, 'https://coastslide.com'], [/http:\/\/coastsliding\.com/g, 'https://coastslide.com'], [/www\.coastsliding\.com/g, 'coastslide.com'], [/coastsliding\.com/g, 'coastslide.com'],
   [/\+1-305-555-7543/g, '+17866593290'], [/\+13055557543/g, '+17866593290'], [/13055557543/g, '17866593290'], [/3055557543/g, '17866593290'],
   [/\(305\) 555-7543/g, '(786) 659-3290'], [/\(954\) 555-7543/g, '(786) 659-3290'], [/\(561\) 555-7543/g, '(786) 659-3290'], [/305-555-7543/g, '786-659-3290'], [/954-555-7543/g, '786-659-3290'], [/561-555-7543/g, '786-659-3290'], [/305\.555\.7543/g, '786.659.3290'],
+  [/\/cdn-cgi\/image\/[^"'\s>]+\/images\//g, '/images/'],
   [/\s*link\('pages\/florida-keys\.html', 'Florida Keys'\) \+/g, ''], [/\s*mob\('pages\/florida-keys\.html', 'Florida Keys'\) \+/g, ''], [/\['miami', 'broward', 'palm', 'keys'\]/g, "['miami', 'broward', 'palm']"], [/<option>Florida Keys<\/option>/g, ''], [/Miami-Dade, Broward, Palm Beach and the Florida Keys/g, 'Miami-Dade, Broward and Palm Beach']
 ];
 
@@ -22,7 +23,7 @@ const HTML_FIXES = `<style id="cs-worker-performance-fixes">
 img.cs-lazy-img{background:#EBF5FC;transition:filter .25s ease,opacity .25s ease}.svc-img img.cs-lazy-img,.ps-cell img.cs-lazy-img{filter:blur(5px);opacity:.72}.svc-img img.cs-lazy-img.cs-loaded,.ps-cell img.cs-lazy-img.cs-loaded{filter:none;opacity:1}.photo-strip{grid-template-columns:repeat(3,minmax(0,1fr))!important}.rp-photo img,.rp-photo-overlay{display:none!important}@media(max-width:768px){.photo-strip{grid-template-columns:1fr!important}.ps-cell{aspect-ratio:16/10!important}}
 </style>
 <script id="cs-worker-performance-script">
-(function(){function load(img){if(!img||!img.dataset.src)return;img.src=img.dataset.src;img.removeAttribute('data-src');img.addEventListener('load',function(){img.classList.add('cs-loaded')},{once:true})}function init(){var imgs=[].slice.call(document.querySelectorAll('img[data-src]'));if(!imgs.length)return;if('IntersectionObserver'in window){var io=new IntersectionObserver(function(entries){entries.forEach(function(entry){if(entry.isIntersecting){load(entry.target);io.unobserve(entry.target)}})},{rootMargin:'650px 0px',threshold:.01});imgs.forEach(function(img){io.observe(img)})}else imgs.forEach(load)}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init()})();
+(function(){function direct(src){return src.replace(/^\/cdn-cgi\/image\/[^/]+\//,'/')}function load(img){if(!img||!img.dataset.src)return;var next=img.dataset.src;img.onerror=function(){var fallback=direct(img.src||next);if(fallback&&fallback!==img.src){img.onerror=null;img.src=fallback}};img.src=next;img.removeAttribute('data-src');img.addEventListener('load',function(){img.classList.add('cs-loaded')},{once:true})}function init(){var imgs=[].slice.call(document.querySelectorAll('img[data-src]'));if(!imgs.length)return;if('IntersectionObserver'in window){var io=new IntersectionObserver(function(entries){entries.forEach(function(entry){if(entry.isIntersecting){load(entry.target);io.unobserve(entry.target)}})},{rootMargin:'650px 0px',threshold:.01});imgs.forEach(function(img){io.observe(img)})}else imgs.forEach(load)}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init()})();
 </script>`;
 
 function shouldRewrite(contentType) { return /text\/html/i.test(contentType || ''); }
@@ -61,7 +62,7 @@ async function resolvePhotoSrc(env, request, src, alt) {
 }
 
 function photoNumber(src) { const match = src.match(/(?:^|\/)images\/(\d+)\.(?:jpg|jpeg|png|webp|avif)/i); return match ? match[1] : ''; }
-function optimizedImageSrc(src, number) { const cleanSrc = src.split('?')[0].replace(/^\.\//, '').replace(/^\//, ''); if (!number || !OPTIMIZED_PHOTO_NUMBERS.has(number)) return '/' + cleanSrc; const width = number === '1' ? 1200 : (['4', '8'].includes(number) ? 760 : 820); return `/cdn-cgi/image/width=${width},quality=68,format=auto/${cleanSrc}`; }
+function optimizedImageSrc(src, number) { const cleanSrc = src.split('?')[0].replace(/^\.\//, '').replace(/^\//, ''); return '/' + cleanSrc; }
 function attrValue(attrs, name) { const doubleQuoted = attrs.match(new RegExp(`\\b${name}="([^"]*)"`, 'i')); if (doubleQuoted) return doubleQuoted[1]; const singleQuoted = attrs.match(new RegExp(`\\b${name}='([^']*)'`, 'i')); return singleQuoted ? singleQuoted[1] : ''; }
 function removeAttr(attrs, name) { return attrs.replace(new RegExp(`\\s*${name}="[^"]*"`, 'ig'), '').replace(new RegExp(`\\s*${name}='[^']*'`, 'ig'), ''); }
 
