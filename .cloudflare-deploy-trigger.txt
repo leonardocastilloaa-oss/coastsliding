@@ -1,3 +1,3 @@
-Trigger deploy after contact timeout, region photo removal, and image optimization update.
-Timestamp: 2026-05-20T06:35:00Z
-Commit with Worker fixes: ab1c02efb7e1d6e64c49ab25bb43eac7d057a190
+Trigger deploy after removing region photos from served HTML and forcing Cloudflare image optimization URLs.
+Timestamp: 2026-05-20T07:05:00Z
+Commit with Worker fixes: 66fdcac5843059fe8bdc70dcf941d23e8ad32b51
