@@ -1,108 +1,31 @@
+import { EmailMessage } from "cloudflare:email";
+
 const PRIMARY_HOST = 'coastslide.com';
 const OLD_HOSTS = new Set(['coastsliding.com', 'www.coastsliding.com', 'www.coastslide.com']);
 const CONTACT_EMAIL = 'coastsliding@gmail.com';
+const FROM_EMAIL = 'forms@coastslide.com';
 const PHONE_DISPLAY = '(786) 659-3290';
-const PHONE_TEL = '+17866593290';
 const PHONE_SMS = '+17866593290';
 const PHOTO_EXTENSIONS = ['webp', 'avif', 'jpg', 'jpeg', 'png', 'WEBP', 'AVIF', 'JPG', 'JPEG', 'PNG'];
 const PHOTO_DIRS = ['images', 'imagenes', 'images/svg'];
 const OPTIMIZED_PHOTO_NUMBERS = new Set(['2', '3', '4', '5', '6', '7', '8', '9', '10']);
 
 const REPLACEMENTS = [
-  [/https:\/\/coastsliding\.com/g, 'https://coastslide.com'],
-  [/http:\/\/coastsliding\.com/g, 'https://coastslide.com'],
-  [/www\.coastsliding\.com/g, 'coastslide.com'],
-  [/coastsliding\.com/g, 'coastslide.com'],
-  [/\+1-305-555-7543/g, '+17866593290'],
-  [/\+13055557543/g, '+17866593290'],
-  [/13055557543/g, '17866593290'],
-  [/3055557543/g, '17866593290'],
-  [/\(305\) 555-7543/g, '(786) 659-3290'],
-  [/\(954\) 555-7543/g, '(786) 659-3290'],
-  [/\(561\) 555-7543/g, '(786) 659-3290'],
-  [/305-555-7543/g, '786-659-3290'],
-  [/954-555-7543/g, '786-659-3290'],
-  [/561-555-7543/g, '786-659-3290'],
-  [/305\.555\.7543/g, '786.659.3290'],
-  [/\s*link\('pages\/florida-keys\.html', 'Florida Keys'\) \+/g, ''],
-  [/\s*mob\('pages\/florida-keys\.html', 'Florida Keys'\) \+/g, ''],
-  [/\['miami', 'broward', 'palm', 'keys'\]/g, "['miami', 'broward', 'palm']"],
-  [/<option>Florida Keys<\/option>/g, ''],
-  [/Miami-Dade, Broward, Palm Beach and the Florida Keys/g, 'Miami-Dade, Broward and Palm Beach']
+  [/https:\/\/coastsliding\.com/g, 'https://coastslide.com'], [/http:\/\/coastsliding\.com/g, 'https://coastslide.com'], [/www\.coastsliding\.com/g, 'coastslide.com'], [/coastsliding\.com/g, 'coastslide.com'],
+  [/\+1-305-555-7543/g, '+17866593290'], [/\+13055557543/g, '+17866593290'], [/13055557543/g, '17866593290'], [/3055557543/g, '17866593290'],
+  [/\(305\) 555-7543/g, '(786) 659-3290'], [/\(954\) 555-7543/g, '(786) 659-3290'], [/\(561\) 555-7543/g, '(786) 659-3290'], [/305-555-7543/g, '786-659-3290'], [/954-555-7543/g, '786-659-3290'], [/561-555-7543/g, '786-659-3290'], [/305\.555\.7543/g, '786.659.3290'],
+  [/\s*link\('pages\/florida-keys\.html', 'Florida Keys'\) \+/g, ''], [/\s*mob\('pages\/florida-keys\.html', 'Florida Keys'\) \+/g, ''], [/\['miami', 'broward', 'palm', 'keys'\]/g, "['miami', 'broward', 'palm']"], [/<option>Florida Keys<\/option>/g, ''], [/Miami-Dade, Broward, Palm Beach and the Florida Keys/g, 'Miami-Dade, Broward and Palm Beach']
 ];
 
-const DESIGN_FIX_CSS = `
-<style id="cs-worker-fixes">
-.photo-strip{grid-template-columns:repeat(3,minmax(0,1fr))!important;max-width:1180px;margin:0 auto;background:#fff;box-shadow:0 2px 12px rgba(11,98,141,.12)}
-.ps-cell{aspect-ratio:16/11!important;min-height:230px;background:linear-gradient(135deg,#EBF5FC,#fff)}
-.ps-cell img,.svc-img img{display:block!important;width:100%!important;height:100%!important;object-fit:cover!important}.ps-cell img{filter:brightness(.86)!important}.ps-cell:hover img{filter:brightness(1)!important}
+const DESIGN_FIX_CSS = `<style id="cs-worker-fixes">
+.photo-strip{grid-template-columns:repeat(3,minmax(0,1fr))!important;max-width:1180px;margin:0 auto;background:#fff;box-shadow:0 2px 12px rgba(11,98,141,.12)}.ps-cell{aspect-ratio:16/11!important;min-height:230px;background:linear-gradient(135deg,#EBF5FC,#fff)}.ps-cell img,.svc-img img{display:block!important;width:100%!important;height:100%!important;object-fit:cover!important}.ps-cell img{filter:brightness(.86)!important}.ps-cell:hover img{filter:brightness(1)!important}
 .rpanel.active{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(360px,.95fr);align-items:stretch;border-radius:14px!important;overflow:hidden!important}.rp-photo{min-height:0!important;background:linear-gradient(145deg,#073F5F,#0B628D 58%,#087D87)!important}.rp-photo img,.rp-photo-overlay{display:none!important}.rp-photo-content{position:relative!important;inset:auto!important;padding:44px 38px!important;min-height:520px!important;justify-content:flex-end!important;background:linear-gradient(145deg,#073F5F,#084F73 58%,#087D87)!important}.rp-stat{min-width:0;padding:14px 12px!important;background:rgba(0,29,49,.48)!important;border-color:rgba(255,255,255,.34)!important}.rp-stat-n{font-size:clamp(18px,1.8vw,22px)!important;line-height:1.05!important;white-space:nowrap;color:#fff!important;text-shadow:0 2px 8px rgba(0,0,0,.35)}.rp-stat-l{font-size:9px!important;line-height:1.25!important;color:#fff!important;opacity:.94!important;overflow-wrap:anywhere}.rp-tag,.rp-city{color:#fff!important;text-shadow:0 1px 5px rgba(0,0,0,.32)}
 .cs-sms-float{position:fixed;right:18px;bottom:18px;z-index:99999;display:inline-flex;align-items:center;gap:10px;padding:13px 18px;border-radius:999px;background:#073F5F;color:#fff!important;text-decoration:none;font-weight:900;font-size:14px;line-height:1;box-shadow:0 14px 36px rgba(4,47,73,.34);border:2px solid rgba(255,255,255,.9)}.cs-sms-float span{display:grid;place-items:center;width:24px;height:24px;border-radius:999px;background:#fff;color:#073F5F;font-size:14px}.cs-sms-float:hover{background:#0B628D;color:#fff!important}.form-success.form-error{background:#FFF4F2!important;border-color:#F0B8AC!important;color:#8A2418!important}
-@media(max-width:1024px){.rpanel.active{grid-template-columns:1fr!important;border-radius:14px!important}.photo-strip{grid-template-columns:1fr!important}.ps-cell{aspect-ratio:16/10!important}.rp-photo-content{min-height:0!important}}
-@media(max-width:768px){.photo-strip .ps-cell:nth-child(3){display:block!important}.rp-photo{display:block!important;background:#073F5F!important}.rp-photo-content{padding:22px 18px 20px!important;justify-content:flex-start!important;gap:10px!important}.rp-tag{font-size:9px!important;letter-spacing:1.6px!important;margin-bottom:0!important}.rp-title{font-size:clamp(32px,10vw,42px)!important;line-height:1!important;margin-bottom:4px!important}.rp-cities{gap:7px!important;margin-bottom:8px!important}.rp-city{font-size:10px!important;padding:5px 10px!important;line-height:1.15!important}.rp-stats{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important}.rp-stat{padding:10px 8px!important;border-radius:8px!important}.rp-stat-n{font-size:16px!important;white-space:normal!important;line-height:1.1!important}.rp-stat-l{font-size:8px!important;letter-spacing:.5px!important;line-height:1.2!important}.rp-info{padding:24px 18px!important;gap:16px!important}.rp-info h3{font-size:21px!important;line-height:1.2!important}.rp-info p{font-size:14px!important;line-height:1.65!important}.rp-check-list{grid-template-columns:1fr!important;gap:8px!important}.cs-sms-float{right:12px;bottom:12px;padding:12px 14px;font-size:13px}.cs-sms-float span{width:22px;height:22px}}
-@media(max-width:520px){.region-tabs{gap:8px!important}.rtab{flex:1 1 100%!important;justify-content:center!important}.rp-stats{grid-template-columns:1fr 1fr!important}.rp-stat-n{white-space:normal!important}}
-@media(max-width:380px){.rp-stats{grid-template-columns:1fr!important}.rp-title{font-size:31px!important}.cs-sms-float{left:12px;right:12px;justify-content:center}}
+@media(max-width:1024px){.rpanel.active{grid-template-columns:1fr!important;border-radius:14px!important}.photo-strip{grid-template-columns:1fr!important}.ps-cell{aspect-ratio:16/10!important}.rp-photo-content{min-height:0!important}}@media(max-width:768px){.photo-strip .ps-cell:nth-child(3){display:block!important}.rp-photo{display:block!important;background:#073F5F!important}.rp-photo-content{padding:22px 18px 20px!important;justify-content:flex-start!important;gap:10px!important}.rp-tag{font-size:9px!important;letter-spacing:1.6px!important;margin-bottom:0!important}.rp-title{font-size:clamp(32px,10vw,42px)!important;line-height:1!important;margin-bottom:4px!important}.rp-cities{gap:7px!important;margin-bottom:8px!important}.rp-city{font-size:10px!important;padding:5px 10px!important;line-height:1.15!important}.rp-stats{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important}.rp-stat{padding:10px 8px!important;border-radius:8px!important}.rp-stat-n{font-size:16px!important;white-space:normal!important;line-height:1.1!important}.rp-stat-l{font-size:8px!important;letter-spacing:.5px!important;line-height:1.2!important}.rp-info{padding:24px 18px!important;gap:16px!important}.rp-info h3{font-size:21px!important;line-height:1.2!important}.rp-info p{font-size:14px!important;line-height:1.65!important}.rp-check-list{grid-template-columns:1fr!important;gap:8px!important}.cs-sms-float{right:12px;bottom:12px;padding:12px 14px;font-size:13px}.cs-sms-float span{width:22px;height:22px}}@media(max-width:520px){.region-tabs{gap:8px!important}.rtab{flex:1 1 100%!important;justify-content:center!important}.rp-stats{grid-template-columns:1fr 1fr!important}.rp-stat-n{white-space:normal!important}}@media(max-width:380px){.rp-stats{grid-template-columns:1fr!important}.rp-title{font-size:31px!important}.cs-sms-float{left:12px;right:12px;justify-content:center}}
 </style>`;
 
-const CONTACT_FIX_SCRIPT = `
-<script id="cs-contact-fixes">
-(function(){
-  var PHONE='${PHONE_DISPLAY}', SMS='${PHONE_SMS}';
-  function ready(fn){ if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',fn); else fn(); }
-  function ensureSmsButton(){
-    if(document.querySelector('.cs-sms-float')) return;
-    var a=document.createElement('a');
-    a.className='cs-sms-float';
-    a.href='sms:'+SMS+'?body=Hi%20CoastSlide%2C%20I%20need%20help%20with%20a%20sliding%20door%20or%20window.';
-    a.setAttribute('aria-label','Send CoastSlide a text message');
-    a.innerHTML='<span aria-hidden="true">&#9993;</span> Text Us';
-    document.body.appendChild(a);
-  }
-  function statusBox(form){ return form.querySelector('.form-success') || document.getElementById('form-success'); }
-  function setStatus(form,msg,isError){ var box=statusBox(form); if(!box) return; box.textContent=msg; box.classList.toggle('form-error',!!isError); box.style.display='block'; }
-  function prepare(){
-    document.querySelectorAll('form').forEach(function(form){
-      form.setAttribute('action','/api/contact');
-      form.setAttribute('method','post');
-      form.setAttribute('accept-charset','UTF-8');
-      if(!form.querySelector('[name="problem"]')){ var hidden=document.createElement('input'); hidden.type='hidden'; hidden.name='problem'; hidden.value='Website contact request'; form.appendChild(hidden); }
-      if(!form.querySelector('[name="source_page"]')){ var source=document.createElement('input'); source.type='hidden'; source.name='source_page'; source.value=location.href; form.appendChild(source); }
-    });
-  }
-  function fetchWithTimeout(url, options, ms){
-    var controller = window.AbortController ? new AbortController() : null;
-    var timer = setTimeout(function(){ if(controller) controller.abort(); }, ms);
-    options = options || {};
-    if(controller) options.signal = controller.signal;
-    return fetch(url, options).finally(function(){ clearTimeout(timer); });
-  }
-  async function send(form){
-    var button=form.querySelector('button[type="submit"],input[type="submit"]');
-    var old=button ? (button.textContent || button.value || 'Send Request') : 'Send Request';
-    if(button){ button.disabled=true; if(button.tagName==='INPUT') button.value='Sending...'; else button.textContent='Sending...'; }
-    var box=statusBox(form); if(box){ box.style.display='none'; box.classList.remove('form-error'); }
-    try{
-      var res=await fetchWithTimeout('/api/contact',{method:'POST',headers:{Accept:'application/json'},body:new FormData(form)},14000);
-      var data={}; try{ data=await res.json(); }catch(e){}
-      if(!res.ok || !data.ok) throw new Error((data && data.message) || 'send failed');
-      setStatus(form,'Thank you. Your request was sent and CoastSlide will contact you shortly.',false);
-      form.reset();
-      if(button){ if(button.tagName==='INPUT') button.value='Sent'; else button.textContent='Sent. We will contact you shortly.'; button.style.background='#27AE60'; }
-    }catch(error){
-      if(button){ button.disabled=false; if(button.tagName==='INPUT') button.value=old; else button.textContent=old; }
-      setStatus(form,'The form could not be sent right now. Please call or text '+PHONE+'.',true);
-    }
-  }
-  ready(function(){
-    ensureSmsButton();
-    prepare();
-    document.querySelectorAll('form').forEach(function(form){
-      if(form.dataset.csWorkerReady) return;
-      form.dataset.csWorkerReady='1';
-      form.addEventListener('submit',function(event){ event.preventDefault(); event.stopImmediatePropagation(); send(form); },true);
-    });
-  });
-})();
+const CONTACT_FIX_SCRIPT = `<script id="cs-contact-fixes">
+(function(){var PHONE='${PHONE_DISPLAY}',SMS='${PHONE_SMS}';function ready(fn){if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',fn);else fn()}function ensureSmsButton(){if(document.querySelector('.cs-sms-float'))return;var a=document.createElement('a');a.className='cs-sms-float';a.href='sms:'+SMS+'?body=Hi%20CoastSlide%2C%20I%20need%20help%20with%20a%20sliding%20door%20or%20window.';a.setAttribute('aria-label','Send CoastSlide a text message');a.innerHTML='<span aria-hidden="true">&#9993;</span> Text Us';document.body.appendChild(a)}function statusBox(form){return form.querySelector('.form-success')||document.getElementById('form-success')}function setStatus(form,msg,isError){var box=statusBox(form);if(!box)return;box.textContent=msg;box.classList.toggle('form-error',!!isError);box.style.display='block'}function prepare(){document.querySelectorAll('form').forEach(function(form){form.setAttribute('action','/api/contact');form.setAttribute('method','post');form.setAttribute('accept-charset','UTF-8');if(!form.querySelector('[name="problem"]')){var hidden=document.createElement('input');hidden.type='hidden';hidden.name='problem';hidden.value='Website contact request';form.appendChild(hidden)}if(!form.querySelector('[name="source_page"]')){var source=document.createElement('input');source.type='hidden';source.name='source_page';source.value=location.href;form.appendChild(source)}})}function fetchWithTimeout(url,options,ms){var controller=window.AbortController?new AbortController():null;var timer=setTimeout(function(){if(controller)controller.abort()},ms);options=options||{};if(controller)options.signal=controller.signal;return fetch(url,options).finally(function(){clearTimeout(timer)})}async function send(form){var button=form.querySelector('button[type="submit"],input[type="submit"]');var old=button?(button.textContent||button.value||'Send Request'):'Send Request';if(button){button.disabled=true;if(button.tagName==='INPUT')button.value='Sending...';else button.textContent='Sending...'}var box=statusBox(form);if(box){box.style.display='none';box.classList.remove('form-error')}try{var res=await fetchWithTimeout('/api/contact',{method:'POST',headers:{Accept:'application/json'},body:new FormData(form)},14000);var data={};try{data=await res.json()}catch(e){}if(!res.ok||!data.ok)throw new Error((data&&data.message)||'send failed');setStatus(form,'Thank you. Your request was sent and CoastSlide will contact you shortly.',false);form.reset();if(button){if(button.tagName==='INPUT')button.value='Sent';else button.textContent='Sent. We will contact you shortly.';button.style.background='#27AE60'}}catch(error){if(button){button.disabled=false;if(button.tagName==='INPUT')button.value=old;else button.textContent=old}setStatus(form,'The form could not be sent right now. Please call or text '+PHONE+'.',true)}}ready(function(){ensureSmsButton();prepare();document.querySelectorAll('form').forEach(function(form){if(form.dataset.csWorkerReady)return;form.dataset.csWorkerReady='1';form.addEventListener('submit',function(event){event.preventDefault();event.stopImmediatePropagation();send(form)},true)})})})();
 </script>`;
 
 function shouldRewrite(contentType) { return /text\/html|text\/css|application\/javascript|text\/javascript|application\/json|text\/plain|application\/xml|text\/xml/i.test(contentType || ''); }
@@ -114,131 +37,20 @@ function json(body, status = 200) { return new Response(JSON.stringify(body), { 
 function timeout(ms) { return new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), ms)); }
 async function withTimeout(promise, ms) { return Promise.race([promise, timeout(ms)]); }
 function assetUrl(request, path) { const url = new URL(request.url); url.pathname = '/' + path.replace(/^\/+/, ''); url.search = ''; return url; }
-async function assetLooksReal(env, request, path) {
-  const response = await env.ASSETS.fetch(new Request(assetUrl(request, path), request));
-  if (!response.ok) return false;
-  const type = (response.headers.get('content-type') || '').toLowerCase();
-  if (type.includes('text/html') || type.includes('svg')) return false;
-  const size = Number(response.headers.get('content-length') || 0);
-  if (size && size < 4096) return false;
-  return true;
-}
-function photoCandidates(src, alt) {
-  const match = src.match(/(?:^|\/)(?:images|imagenes)(?:\/svg)?\/([^\/]+?)\.(?:jpg|jpeg|png|webp|avif)(?:\?.*)?$/i);
-  if (!match) return [];
-  const rawName = match[1];
-  const number = (rawName.match(/^\d+/) || [rawName])[0];
-  const names = unique([number, rawName, slug(alt)]);
-  const paths = [];
-  for (const dir of PHOTO_DIRS) for (const name of names) for (const ext of PHOTO_EXTENSIONS) paths.push(`${dir}/${name}.${ext}`);
-  return unique(paths);
-}
+async function assetLooksReal(env, request, path) { const response = await env.ASSETS.fetch(new Request(assetUrl(request, path), request)); if (!response.ok) return false; const type = (response.headers.get('content-type') || '').toLowerCase(); if (type.includes('text/html') || type.includes('svg')) return false; const size = Number(response.headers.get('content-length') || 0); if (size && size < 4096) return false; return true; }
+function photoCandidates(src, alt) { const match = src.match(/(?:^|\/)(?:images|imagenes)(?:\/svg)?\/([^\/]+?)\.(?:jpg|jpeg|png|webp|avif)(?:\?.*)?$/i); if (!match) return []; const rawName = match[1]; const number = (rawName.match(/^\d+/) || [rawName])[0]; const names = unique([number, rawName, slug(alt)]); const paths = []; for (const dir of PHOTO_DIRS) for (const name of names) for (const ext of PHOTO_EXTENSIONS) paths.push(`${dir}/${name}.${ext}`); return unique(paths); }
 async function resolvePhotoSrc(env, request, src, alt) { for (const path of photoCandidates(src, alt)) if (await assetLooksReal(env, request, path)) return '/' + path; return src; }
-function optimizedImageSrc(src) {
-  const cleanSrc = src.split('?')[0];
-  const match = cleanSrc.match(/(?:^|\/)(images\/(\d+)\.(?:jpg|jpeg|png|webp|avif))/i);
-  if (!match || !OPTIMIZED_PHOTO_NUMBERS.has(match[2])) return src;
-  const width = ['4', '8'].includes(match[2]) ? 760 : 820;
-  return `/cdn-cgi/image/width=${width},quality=72,format=auto/${match[1]}`;
-}
-async function rewriteImageSources(html, env, request) {
-  const imgPattern = /<img\b([^>]*?)\bsrc="([^"]+)"([^>]*)>/gi;
-  const matches = [...html.matchAll(imgPattern)];
-  let rewritten = html;
-  for (const match of matches) {
-    const full = match[0];
-    const src = match[2];
-    if (!/\/(?:images|imagenes)\//i.test(src) && !/(?:^|\.\/)images\//i.test(src)) continue;
-    const attrs = `${match[1]} ${match[3]}`;
-    const alt = (attrs.match(/\balt="([^"]*)"/i) || [])[1] || '';
-    const resolved = await resolvePhotoSrc(env, request, src, alt);
-    const next = optimizedImageSrc(resolved);
-    let updated = full.replace(`src="${src}"`, `src="${next}"`);
-    if (!/\bdecoding=/i.test(updated)) updated = updated.replace('<img ', '<img decoding="async" ');
-    if (!/\bloading=/i.test(updated) && !/images\/1\./i.test(updated)) updated = updated.replace('<img ', '<img loading="lazy" ');
-    if (!/\bsizes=/i.test(updated) && /\/images\/(?:2|3|4|5|6|7|8|9|10)\./i.test(updated)) updated = updated.replace('<img ', '<img sizes="(max-width: 768px) 92vw, 370px" ');
-    if (updated !== full) rewritten = rewritten.replace(full, updated);
-  }
-  return rewritten;
-}
-function hardenForms(html) {
-  return html.replace(/<form\b([^>]*)>/gi, (full, attrs) => {
-    let next = attrs.replace(/\saction="[^"]*"/i, '').replace(/\smethod="[^"]*"/i, '').replace(/\saccept-charset="[^"]*"/i, '');
-    return `<form${next} action="/api/contact" method="post" accept-charset="UTF-8">`;
-  });
-}
-async function normalizeText(text, contentType, env, request) {
-  let value = REPLACEMENTS.reduce((current, pair) => current.replace(pair[0], pair[1]), text);
-  if (/text\/css/i.test(contentType)) value = value.replace(/\.photo-strip\{display:grid;grid-template-columns:repeat\(4,1fr\);/g, '.photo-strip{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));').replace(/\.rp-photo img\{display:none!important\}/g, '.rp-photo img{display:none!important}').replace(/\.ps-cell\{position:relative;overflow:hidden;aspect-ratio:3\/4\}/g, '.ps-cell{position:relative;overflow:hidden;aspect-ratio:16/11;min-height:230px}');
-  if (/text\/html/i.test(contentType)) {
-    value = await rewriteImageSources(value, env, request);
-    value = hardenForms(value);
-    if (!value.includes('cs-worker-fixes')) value = value.replace('</head>', DESIGN_FIX_CSS + '</head>');
-    if (!value.includes('cs-contact-fixes')) value = value.replace('</body>', CONTACT_FIX_SCRIPT + '</body>');
-  }
-  return value;
-}
-async function parseForm(request) {
-  const type = request.headers.get('content-type') || '';
-  if (type.includes('application/json')) { const data = await request.json(); return { get: (name) => data[name] }; }
-  if (type.includes('application/x-www-form-urlencoded')) { const data = new URLSearchParams(await request.text()); return { get: (name) => data.get(name) }; }
-  return request.formData();
-}
-function buildLead(form, request) {
-  return {
-    name: firstFormValue(form, ['name', 'full_name', 'home-name', 'contact-name', 'cs-field-0-0', 'cs-field-1-0']),
-    phone: firstFormValue(form, ['phone', 'tel', 'phone_number', 'home-phone', 'contact-phone', 'cs-field-0-1', 'cs-field-1-1']),
-    email: firstFormValue(form, ['email', 'mail', 'home-email', 'contact-email', 'cs-field-0-2', 'cs-field-1-2']),
-    area: firstFormValue(form, ['area', 'county', 'city', 'service_area', 'home-county', 'contact-area', 'cs-field-0-3', 'cs-field-1-3']),
-    problem: firstFormValue(form, ['problem', 'repair', 'issue', 'service', 'home-repair', 'contact-problem', 'cs-field-0-4', 'cs-field-1-4']),
-    details: firstFormValue(form, ['details', 'message', 'notes', 'home-details', 'contact-details', 'cs-field-0-5', 'cs-field-1-5']),
-    source: firstFormValue(form, ['source_page']) || request.headers.get('referer') || 'Direct website form'
-  };
-}
+function optimizedImageSrc(src) { const cleanSrc = src.split('?')[0]; const match = cleanSrc.match(/(?:^|\/)(images\/(\d+)\.(?:jpg|jpeg|png|webp|avif))/i); if (!match || !OPTIMIZED_PHOTO_NUMBERS.has(match[2])) return src; const width = ['4', '8'].includes(match[2]) ? 760 : 820; return `/cdn-cgi/image/width=${width},quality=72,format=auto/${match[1]}`; }
+async function rewriteImageSources(html, env, request) { const imgPattern = /<img\b([^>]*?)\bsrc="([^"]+)"([^>]*)>/gi; const matches = [...html.matchAll(imgPattern)]; let rewritten = html; for (const match of matches) { const full = match[0]; const src = match[2]; if (!/\/(?:images|imagenes)\//i.test(src) && !/(?:^|\.\/)images\//i.test(src)) continue; const attrs = `${match[1]} ${match[3]}`; const alt = (attrs.match(/\balt="([^"]*)"/i) || [])[1] || ''; const resolved = await resolvePhotoSrc(env, request, src, alt); const next = optimizedImageSrc(resolved); let updated = full.replace(`src="${src}"`, `src="${next}"`); if (!/\bdecoding=/i.test(updated)) updated = updated.replace('<img ', '<img decoding="async" '); if (!/\bloading=/i.test(updated) && !/images\/1\./i.test(updated)) updated = updated.replace('<img ', '<img loading="lazy" '); if (!/\bsizes=/i.test(updated) && /\/images\/(?:2|3|4|5|6|7|8|9|10)\./i.test(updated)) updated = updated.replace('<img ', '<img sizes="(max-width: 768px) 92vw, 370px" '); if (updated !== full) rewritten = rewritten.replace(full, updated); } return rewritten; }
+function hardenForms(html) { return html.replace(/<form\b([^>]*)>/gi, (full, attrs) => { let next = attrs.replace(/\saction="[^"]*"/i, '').replace(/\smethod="[^"]*"/i, '').replace(/\saccept-charset="[^"]*"/i, ''); return `<form${next} action="/api/contact" method="post" accept-charset="UTF-8">`; }); }
+async function normalizeText(text, contentType, env, request) { let value = REPLACEMENTS.reduce((current, pair) => current.replace(pair[0], pair[1]), text); if (/text\/css/i.test(contentType)) value = value.replace(/\.photo-strip\{display:grid;grid-template-columns:repeat\(4,1fr\);/g, '.photo-strip{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));').replace(/\.rp-photo img\{display:none!important\}/g, '.rp-photo img{display:none!important}').replace(/\.ps-cell\{position:relative;overflow:hidden;aspect-ratio:3\/4\}/g, '.ps-cell{position:relative;overflow:hidden;aspect-ratio:16/11;min-height:230px}'); if (/text\/html/i.test(contentType)) { value = await rewriteImageSources(value, env, request); value = hardenForms(value); if (!value.includes('cs-worker-fixes')) value = value.replace('</head>', DESIGN_FIX_CSS + '</head>'); if (!value.includes('cs-contact-fixes')) value = value.replace('</body>', CONTACT_FIX_SCRIPT + '</body>'); } return value; }
+async function parseForm(request) { const type = request.headers.get('content-type') || ''; if (type.includes('application/json')) { const data = await request.json(); return { get: (name) => data[name] }; } if (type.includes('application/x-www-form-urlencoded')) { const data = new URLSearchParams(await request.text()); return { get: (name) => data.get(name) }; } return request.formData(); }
+function buildLead(form, request) { return { name: firstFormValue(form, ['name', 'full_name', 'home-name', 'contact-name', 'cs-field-0-0', 'cs-field-1-0']), phone: firstFormValue(form, ['phone', 'tel', 'phone_number', 'home-phone', 'contact-phone', 'cs-field-0-1', 'cs-field-1-1']), email: firstFormValue(form, ['email', 'mail', 'home-email', 'contact-email', 'cs-field-0-2', 'cs-field-1-2']), area: firstFormValue(form, ['area', 'county', 'city', 'service_area', 'home-county', 'contact-area', 'cs-field-0-3', 'cs-field-1-3']), problem: firstFormValue(form, ['problem', 'repair', 'issue', 'service', 'home-repair', 'contact-problem', 'cs-field-0-4', 'cs-field-1-4']), details: firstFormValue(form, ['details', 'message', 'notes', 'home-details', 'contact-details', 'cs-field-0-5', 'cs-field-1-5']), source: firstFormValue(form, ['source_page']) || request.headers.get('referer') || 'Direct website form' }; }
 function leadBody(lead) { return ['New CoastSlide contact request', '', 'Name: ' + lead.name, 'Phone: ' + lead.phone, 'Email: ' + lead.email, 'City or Area: ' + (lead.area || 'Not provided'), 'Type of Problem: ' + lead.problem, 'Details: ' + (lead.details || 'Not provided'), 'Source Page: ' + lead.source].join('\n'); }
-function leadPayload(lead) {
-  return { _subject: 'New CoastSlide Contact Request', _template: 'table', _captcha: 'false', _replyto: lead.email, name: lead.name, phone: lead.phone, email: lead.email, area: lead.area || 'Not provided', problem: lead.problem, details: lead.details || 'Not provided', message: leadBody(lead), source_page: lead.source };
-}
-async function sendLeadWithFormSubmit(lead) {
-  const payload = leadPayload(lead);
-  const ajaxResponse = await withTimeout(fetch('https://formsubmit.co/ajax/' + CONTACT_EMAIL, { method: 'POST', headers: { Accept: 'application/json', 'Content-Type': 'application/json' }, body: JSON.stringify(payload) }), 8500);
-  let ajaxResult = {};
-  try { ajaxResult = await ajaxResponse.json(); } catch (error) { ajaxResult = {}; }
-  if (ajaxResponse.ok && String(ajaxResult.success).toLowerCase() === 'true') return { ok: true, method: 'ajax' };
-  const body = new URLSearchParams(payload);
-  const formResponse = await withTimeout(fetch('https://formsubmit.co/' + CONTACT_EMAIL, { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8', Accept: 'text/html,application/json' }, body }), 8500);
-  const text = await formResponse.text().catch(() => '');
-  const failedActivation = /activate|activation|verify|confirm/i.test(text);
-  return { ok: formResponse.ok && !failedActivation, method: 'form', message: failedActivation ? 'The email form needs one-time activation.' : text.slice(0, 240) };
-}
-async function handleContact(request) {
-  if (request.method === 'OPTIONS') return json({ ok: true });
-  if (request.method !== 'POST') return json({ ok: false, error: 'Method not allowed' }, 405);
-  const form = await parseForm(request);
-  if (clean(form.get('company'))) return json({ ok: true, skipped: 'bot_field' });
-  const lead = buildLead(form, request);
-  if (!lead.name || !lead.phone || !lead.email || !lead.problem) return json({ ok: false, error: 'missing_required_fields', message: 'Please complete name, phone, email and type of problem.' }, 400);
-  try {
-    const delivery = await sendLeadWithFormSubmit(lead);
-    if (delivery.ok) return json({ ok: true, delivery: delivery.method });
-    const activationRequired = /activation/i.test(clean(delivery.message));
-    return json({ ok: false, error: activationRequired ? 'activation_required' : 'email_delivery_failed', message: activationRequired ? 'The email form needs one-time activation.' : 'Email delivery failed.' }, activationRequired ? 503 : 502);
-  } catch (error) {
-    return json({ ok: false, error: error && error.message === 'timeout' ? 'email_delivery_timeout' : 'email_delivery_failed', message: 'Email delivery failed.' }, 502);
-  }
-}
+function emailRaw(lead) { const safeReply = clean(lead.email).replace(/[<>]/g, ''); return ['From: CoastSlide Website <' + FROM_EMAIL + '>', 'To: CoastSlide Leads <' + CONTACT_EMAIL + '>', 'Reply-To: ' + safeReply, 'Subject: New CoastSlide Contact Request', 'MIME-Version: 1.0', 'Content-Type: text/plain; charset=UTF-8', 'Content-Transfer-Encoding: 8bit', '', leadBody(lead)].join('\r\n'); }
+async function sendLeadWithCloudflare(lead, env) { if (!env.LEAD_EMAIL || typeof env.LEAD_EMAIL.send !== 'function') return { ok: false, skipped: true, message: 'Cloudflare Email binding missing' }; const message = new EmailMessage(FROM_EMAIL, CONTACT_EMAIL, emailRaw(lead)); await withTimeout(env.LEAD_EMAIL.send(message), 8500); return { ok: true, method: 'cloudflare_email' }; }
+function leadPayload(lead) { return { _subject: 'New CoastSlide Contact Request', _template: 'table', _captcha: 'false', _replyto: lead.email, name: lead.name, phone: lead.phone, email: lead.email, area: lead.area || 'Not provided', problem: lead.problem, details: lead.details || 'Not provided', message: leadBody(lead), source_page: lead.source }; }
+async function sendLeadWithFormSubmit(lead) { const payload = leadPayload(lead); const ajaxResponse = await withTimeout(fetch('https://formsubmit.co/ajax/' + CONTACT_EMAIL, { method: 'POST', headers: { Accept: 'application/json', 'Content-Type': 'application/json' }, body: JSON.stringify(payload) }), 8500); let ajaxResult = {}; try { ajaxResult = await ajaxResponse.json(); } catch (error) { ajaxResult = {}; } if (ajaxResponse.ok && String(ajaxResult.success).toLowerCase() === 'true') return { ok: true, method: 'formsubmit' }; return { ok: false, method: 'formsubmit', message: clean(ajaxResult.message) || 'FormSubmit did not confirm delivery' }; }
+async function handleContact(request, env) { if (request.method === 'OPTIONS') return json({ ok: true }); if (request.method !== 'POST') return json({ ok: false, error: 'Method not allowed' }, 405); const form = await parseForm(request); if (clean(form.get('company'))) return json({ ok: true, skipped: 'bot_field' }); const lead = buildLead(form, request); if (!lead.name || !lead.phone || !lead.email || !lead.problem) return json({ ok: false, error: 'missing_required_fields', message: 'Please complete name, phone, email and type of problem.' }, 400); try { const cloudflareDelivery = await sendLeadWithCloudflare(lead, env); if (cloudflareDelivery.ok) return json({ ok: true, delivery: 'cloudflare_email' }); } catch (error) { console.log('Cloudflare Email failed:', error && error.message ? error.message : error); } try { const fallback = await sendLeadWithFormSubmit(lead); if (fallback.ok) return json({ ok: true, delivery: 'formsubmit_fallback' }); return json({ ok: false, error: 'email_delivery_failed', message: fallback.message || 'Email delivery failed.' }, 502); } catch (error) { return json({ ok: false, error: error && error.message === 'timeout' ? 'email_delivery_timeout' : 'email_delivery_failed', message: 'Email delivery failed.' }, 502); } }
 
-export default {
-  async fetch(request, env) {
-    const url = new URL(request.url);
-    if (OLD_HOSTS.has(url.hostname)) { url.hostname = PRIMARY_HOST; url.protocol = 'https:'; return Response.redirect(url.toString(), 301); }
-    if (url.pathname === '/api/contact') return handleContact(request);
-    const response = await env.ASSETS.fetch(request);
-    const contentType = response.headers.get('content-type') || '';
-    if (!shouldRewrite(contentType)) return response;
-    const headers = new Headers(response.headers);
-    headers.delete('content-length');
-    headers.set('cache-control', 'no-store, no-cache, must-revalidate, max-age=0');
-    return new Response(await normalizeText(await response.text(), contentType, env, request), { status: response.status, statusText: response.statusText, headers });
-  }
-};
+export default { async fetch(request, env) { const url = new URL(request.url); if (OLD_HOSTS.has(url.hostname)) { url.hostname = PRIMARY_HOST; url.protocol = 'https:'; return Response.redirect(url.toString(), 301); } if (url.pathname === '/api/contact') return handleContact(request, env); const response = await env.ASSETS.fetch(request); const contentType = response.headers.get('content-type') || ''; if (!shouldRewrite(contentType)) return response; const headers = new Headers(response.headers); headers.delete('content-length'); headers.set('cache-control', 'no-store, no-cache, must-revalidate, max-age=0'); return new Response(await normalizeText(await response.text(), contentType, env, request), { status: response.status, statusText: response.statusText, headers }); } };
