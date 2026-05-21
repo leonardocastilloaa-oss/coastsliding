@@ -1,4 +1,4 @@
-Trigger deploy after direct PageSpeed fixes in source HTML.
-Timestamp: 2026-05-21T03:48:00Z
-Commit: 00cb314957cb221ff8f6d574aefa679a0f664c0b
-Changes: removed eager homepage image downloads, deferred CSS loading, deferred components script.
+Trigger deploy after lazy image fallback fix.
+Timestamp: 2026-05-21T04:05:00Z
+Commit: 170e5e551646cfe8e6fca3b074acb650376adce5
+Changes: lazy photos fall back to direct /images paths when Cloudflare image resizing is unavailable.
