@@ -9,5 +9,11 @@
   "assets": {
     "directory": ".",
     "binding": "ASSETS"
-  }
+  },
+  "send_email": [
+    {
+      "name": "LEAD_EMAIL",
+      "destination_address": "coastsliding@gmail.com"
+    }
+  ]
 }
