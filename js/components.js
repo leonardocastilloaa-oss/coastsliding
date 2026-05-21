@@ -21,7 +21,8 @@
       '.cta-section .cta-lead{font-size:19px!important;font-weight:800!important;line-height:1.75!important;text-shadow:0 2px 8px rgba(0,0,0,.35)}' +
       '.cta-section .cta-phone{background:rgba(255,255,255,.20)!important;border-color:rgba(255,255,255,.55)!important;box-shadow:0 12px 36px rgba(0,0,0,.22)!important}' +
       '.cta-section .cta-phone:hover{background:rgba(255,255,255,.30)!important}' +
-      '.cs-sms-float:hover{background:#0B628D!important;color:#fff!important}';
+      '.cs-sms-float:hover{background:#0B628D!important;color:#fff!important}' +
+      'img.cs-loaded{filter:none!important;opacity:1!important;background:transparent!important}';
     document.head.appendChild(style);
   }
 
@@ -53,97 +54,88 @@
     nav.innerHTML =
       '<a href="' + ROOT + 'index.html" class="nav-logo" aria-label="CoastSlide home">' + brand() + '</a>' +
       '<ul class="nav-links">' +
-      '<li class="has-drop">' + link('pages/services.html', 'Services') +
-      '<div class="drop-menu">' +
-      link('pages/roller-replacement.html', 'Roller Replacement') +
-      link('pages/track-repair.html', 'Track Repair') +
-      link('pages/impact-glass.html', 'Impact Glass') +
-      link('pages/lock-security.html', 'Lock & Security') +
-      link('pages/window-repair.html', 'Window Repair') +
-      link('pages/hoa-commercial.html', 'HOA & Commercial') +
-      '</div></li>' +
-      '<li class="has-drop"><a href="#" aria-label="Service regions">Regions</a>' +
-      '<div class="drop-menu">' +
-      link('pages/miami-dade.html', 'Miami-Dade County') +
-      link('pages/broward.html', 'Broward County') +
-      link('pages/palm-beach.html', 'Palm Beach County') +
-      '</div></li>' +
-      '<li class="has-mega"><a href="#" aria-label="Service cities">Cities</a>' +
-      '<div class="mega-menu">' +
-      city('homestead', 'Homestead', 'Miami-Dade') + city('miami', 'Miami', 'Miami-Dade') +
-      city('miami-beach', 'Miami Beach', 'Miami-Dade') + city('hialeah', 'Hialeah', 'Miami-Dade') +
-      city('doral', 'Doral', 'Miami-Dade') + city('coral-gables', 'Coral Gables', 'Miami-Dade') +
-      city('kendall', 'Kendall', 'Miami-Dade') + city('aventura', 'Aventura', 'Miami-Dade') +
-      city('hollywood', 'Hollywood', 'Broward') + city('fort-lauderdale', 'Fort Lauderdale', 'Broward') +
-      city('pembroke-pines', 'Pembroke Pines', 'Broward') + city('weston', 'Weston', 'Broward') +
-      city('coral-springs', 'Coral Springs', 'Broward') + city('boca-raton', 'Boca Raton', 'Palm Beach') +
-      city('delray-beach', 'Delray Beach', 'Palm Beach') + city('west-palm-beach', 'West Palm Beach', 'Palm Beach') +
-      city('palm-beach-gardens', 'Palm Beach Gardens', 'Palm Beach') + city('jupiter', 'Jupiter', 'Palm Beach') +
-      '</div></li>' +
-      '<li>' + link('pages/blog.html', 'Blog') + '</li>' +
-      '<li>' + link('pages/reviews.html', 'Reviews') + '</li>' +
-      '<li>' + link('pages/about.html', 'About') + '</li>' +
-      '<li>' + link('pages/contact.html', 'Contact Us') + '</li>' +
-      '</ul>' +
-      '<div class="nav-right">' +
-      '<a href="tel:' + PHONE_TEL + '" class="nav-phone"><span aria-hidden="true">&#128222;</span> ' + PHONE_DISPLAY + '</a>' +
-      link('pages/contact.html', 'Free Estimate', 'nav-cta') +
-      '<button class="nav-burger" id="burger" type="button" aria-label="Open menu" onclick="csToggleMobile()">&#9776;</button>' +
-      '</div>';
+      '<li class="has-drop">' + link('pages/services.html', 'Services') + '<div class="drop-menu">' +
+      link('pages/roller-replacement.html', 'Roller Replacement') + link('pages/track-repair.html', 'Track Repair') +
+      link('pages/impact-glass.html', 'Impact Glass') + link('pages/lock-security.html', 'Lock & Security') +
+      link('pages/window-repair.html', 'Window Repair') + link('pages/hoa-commercial.html', 'HOA & Commercial') + '</div></li>' +
+      '<li class="has-drop"><a href="#" aria-label="Service regions">Regions</a><div class="drop-menu">' +
+      link('pages/miami-dade.html', 'Miami-Dade County') + link('pages/broward.html', 'Broward County') + link('pages/palm-beach.html', 'Palm Beach County') + '</div></li>' +
+      '<li class="has-mega"><a href="#" aria-label="Service cities">Cities</a><div class="mega-menu">' +
+      city('homestead', 'Homestead', 'Miami-Dade') + city('miami', 'Miami', 'Miami-Dade') + city('miami-beach', 'Miami Beach', 'Miami-Dade') + city('hialeah', 'Hialeah', 'Miami-Dade') +
+      city('doral', 'Doral', 'Miami-Dade') + city('coral-gables', 'Coral Gables', 'Miami-Dade') + city('kendall', 'Kendall', 'Miami-Dade') + city('aventura', 'Aventura', 'Miami-Dade') +
+      city('hollywood', 'Hollywood', 'Broward') + city('fort-lauderdale', 'Fort Lauderdale', 'Broward') + city('pembroke-pines', 'Pembroke Pines', 'Broward') + city('weston', 'Weston', 'Broward') +
+      city('coral-springs', 'Coral Springs', 'Broward') + city('boca-raton', 'Boca Raton', 'Palm Beach') + city('delray-beach', 'Delray Beach', 'Palm Beach') + city('west-palm-beach', 'West Palm Beach', 'Palm Beach') +
+      city('palm-beach-gardens', 'Palm Beach Gardens', 'Palm Beach') + city('jupiter', 'Jupiter', 'Palm Beach') + '</div></li>' +
+      '<li>' + link('pages/blog.html', 'Blog') + '</li><li>' + link('pages/reviews.html', 'Reviews') + '</li><li>' + link('pages/about.html', 'About') + '</li><li>' + link('pages/contact.html', 'Contact Us') + '</li>' +
+      '</ul><div class="nav-right"><a href="tel:' + PHONE_TEL + '" class="nav-phone"><span aria-hidden="true">&#128222;</span> ' + PHONE_DISPLAY + '</a>' +
+      link('pages/contact.html', 'Free Estimate', 'nav-cta') + '<button class="nav-burger" id="burger" type="button" aria-label="Open menu" onclick="csToggleMobile()">&#9776;</button></div>';
 
-    var mobile = document.createElement('div');
-    mobile.className = 'mobile-nav';
-    mobile.id = 'mob-nav';
-    mobile.innerHTML =
-      '<div class="mob-section">Services</div>' + mob('pages/services.html', 'All Services') +
-      mob('pages/roller-replacement.html', 'Roller Replacement') + mob('pages/track-repair.html', 'Track Repair') +
-      mob('pages/impact-glass.html', 'Impact Glass') + mob('pages/lock-security.html', 'Lock & Security') +
-      mob('pages/window-repair.html', 'Window Repair') + mob('pages/hoa-commercial.html', 'HOA & Commercial') +
-      '<div class="mob-section">Regions</div>' + mob('pages/miami-dade.html', 'Miami-Dade County') +
-      mob('pages/broward.html', 'Broward County') + mob('pages/palm-beach.html', 'Palm Beach County') +
-      '<div class="mob-section">Company</div>' + mob('pages/blog.html', 'Blog') + mob('pages/reviews.html', 'Reviews') +
-      mob('pages/about.html', 'About Us') + mob('pages/faq.html', 'FAQ') + mob('pages/contact.html', 'Contact Us') +
-      '<div style="margin-top:20px;padding-bottom:30px"><a href="tel:' + PHONE_TEL + '" class="btn btn-blue" style="display:block;text-align:center;margin-bottom:12px">Call ' + PHONE_DISPLAY + '</a>' +
-      '<a href="https://wa.me/' + PHONE_WA + '" class="btn btn-wa" style="display:block;text-align:center" target="_blank" rel="noopener">WhatsApp Us</a></div>';
-    document.body.appendChild(mobile);
+    if (!document.getElementById('mob-nav')) {
+      var mobile = document.createElement('div');
+      mobile.className = 'mobile-nav';
+      mobile.id = 'mob-nav';
+      mobile.innerHTML = '<div class="mob-section">Services</div>' + mob('pages/services.html', 'All Services') +
+        mob('pages/roller-replacement.html', 'Roller Replacement') + mob('pages/track-repair.html', 'Track Repair') + mob('pages/impact-glass.html', 'Impact Glass') + mob('pages/lock-security.html', 'Lock & Security') + mob('pages/window-repair.html', 'Window Repair') + mob('pages/hoa-commercial.html', 'HOA & Commercial') +
+        '<div class="mob-section">Regions</div>' + mob('pages/miami-dade.html', 'Miami-Dade County') + mob('pages/broward.html', 'Broward County') + mob('pages/palm-beach.html', 'Palm Beach County') +
+        '<div class="mob-section">Company</div>' + mob('pages/blog.html', 'Blog') + mob('pages/reviews.html', 'Reviews') + mob('pages/about.html', 'About Us') + mob('pages/faq.html', 'FAQ') + mob('pages/contact.html', 'Contact Us') +
+        '<div style="margin-top:20px;padding-bottom:30px"><a href="tel:' + PHONE_TEL + '" class="btn btn-blue" style="display:block;text-align:center;margin-bottom:12px">Call ' + PHONE_DISPLAY + '</a><a href="https://wa.me/' + PHONE_WA + '" class="btn btn-wa" style="display:block;text-align:center" target="_blank" rel="noopener">WhatsApp Us</a></div>';
+      document.body.appendChild(mobile);
+    }
   }
 
   function buildFooter() {
     var footer = document.getElementById('footer');
     if (!footer) return;
-    footer.innerHTML =
-      '<div class="container"><div class="footer-grid">' +
-      '<div><a href="' + ROOT + 'index.html" aria-label="CoastSlide home">' + brand() + '</a>' +
+    footer.innerHTML = '<div class="container"><div class="footer-grid"><div><a href="' + ROOT + 'index.html" aria-label="CoastSlide home">' + brand() + '</a>' +
       '<p class="footer-desc">South Florida bilingual sliding door and window repair. Miami-Dade NOA certified. Licensed FL contractor. Homestead to Jupiter.</p>' +
       '<div class="footer-socials"><a href="#" class="fsoc" aria-label="CoastSlide on Facebook">f</a><a href="#" class="fsoc" aria-label="CoastSlide on Instagram">in</a><a href="#" class="fsoc" aria-label="CoastSlide on YouTube">yt</a><a href="#" class="fsoc" aria-label="CoastSlide Google reviews">g</a></div></div>' +
       footCol('Services', [['pages/roller-replacement.html','Roller Replacement'],['pages/track-repair.html','Track Repair'],['pages/impact-glass.html','Impact Glass'],['pages/lock-security.html','Lock & Security'],['pages/window-repair.html','Window Repair'],['pages/hoa-commercial.html','HOA & Commercial']]) +
       footCol('Cities', [['pages/cities/homestead.html','Homestead'],['pages/cities/miami.html','Miami'],['pages/cities/miami-beach.html','Miami Beach'],['pages/cities/fort-lauderdale.html','Fort Lauderdale'],['pages/cities/boca-raton.html','Boca Raton'],['pages/cities/west-palm-beach.html','West Palm Beach'],['pages/cities/jupiter.html','Jupiter']]) +
       footCol('Company', [['pages/about.html','About CoastSlide'],['pages/blog.html','Blog'],['pages/reviews.html','Reviews'],['pages/faq.html','FAQ'],['pages/contact.html','Contact Us'],['pages/privacy.html','Privacy Policy']]) +
-      '</div><div class="footer-bottom"><div class="footer-copy">&copy; 2026 CoastSlide LLC &middot; Licensed Florida Contractor &middot; Homestead to Jupiter</div>' +
-      '<div class="footer-legal">' + link('pages/privacy.html', 'Privacy') + link('pages/terms.html', 'Terms') + '<a href="' + ROOT + 'sitemap.xml">Sitemap</a></div></div></div>';
+      '</div><div class="footer-bottom"><div class="footer-copy">&copy; 2026 CoastSlide LLC &middot; Licensed Florida Contractor &middot; Homestead to Jupiter</div><div class="footer-legal">' + link('pages/privacy.html', 'Privacy') + link('pages/terms.html', 'Terms') + '<a href="' + ROOT + 'sitemap.xml">Sitemap</a></div></div></div>';
   }
 
   function buildTrust() {
     var trust = document.getElementById('trust-bar');
     if (!trust) return;
-    trust.outerHTML = '<div class="trust-bar"><div class="trust-inner">' +
-      '<div class="trust-item"><span class="ti" aria-hidden="true">&#127942;</span> Licensed & Insured</div>' +
-      '<div class="trust-item"><span class="ti" aria-hidden="true">&#9889;</span> Same-Day Service</div>' +
-      '<div class="trust-item"><span class="ti" aria-hidden="true">&#128172;</span> English &amp; Espa&ntilde;ol</div>' +
-      '<div class="trust-item"><span class="ti" aria-hidden="true">&#10003;</span> Miami-Dade NOA</div>' +
-      '<div class="trust-item"><span class="ti" aria-hidden="true">&#128274;</span> Lifetime Warranty</div>' +
-      '<div class="trust-item"><span class="ti" aria-hidden="true">&#128656;</span> Parts on Every Truck</div>' +
-      '</div></div>';
+    trust.outerHTML = '<div class="trust-bar"><div class="trust-inner"><div class="trust-item"><span class="ti" aria-hidden="true">&#127942;</span> Licensed & Insured</div><div class="trust-item"><span class="ti" aria-hidden="true">&#9889;</span> Same-Day Service</div><div class="trust-item"><span class="ti" aria-hidden="true">&#128172;</span> English &amp; Espa&ntilde;ol</div><div class="trust-item"><span class="ti" aria-hidden="true">&#10003;</span> Miami-Dade NOA</div><div class="trust-item"><span class="ti" aria-hidden="true">&#128274;</span> Lifetime Warranty</div><div class="trust-item"><span class="ti" aria-hidden="true">&#128656;</span> Parts on Every Truck</div></div></div>';
   }
 
   function buildCta() {
     var cta = document.getElementById('cta-section');
     if (!cta) return;
-    cta.outerHTML = '<section class="cta-section"><div class="cta-wave"><svg viewBox="0 0 1440 60" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" aria-hidden="true"><path d="M0,0 C360,60 1080,0 1440,40 L1440,0 L0,0 Z" fill="white"/></svg></div>' +
-      '<div class="container"><div class="cta-inner"><div class="chip cta-chip" style="background:rgba(255,255,255,.15);border-color:rgba(255,255,255,.25);color:#fff;margin:0 auto 20px"><span class="dot"></span> Free Estimate - Same Day Available</div>' +
-      '<h2 class="title white center">Your Door Fixed.<br/><em>Today.</em></h2><p class="lead center cta-lead" style="color:#fff;margin:16px auto 0">Flat-rate pricing. Bilingual. Licensed & insured. No surprises.</p>' +
-      '<div class="cta-phones"><a href="tel:' + PHONE_TEL + '" class="cta-phone"><div class="cta-phone-area">One Number for South Florida</div><div class="cta-phone-num">' + PHONE_DISPLAY + '</div></a></div>' +
-      '<p class="cta-note">Mon-Sat 7am-8pm &middot; Emergency 24/7 &middot; Text OK &middot; Se Habla Espa&ntilde;ol</p></div></div></section>';
+    cta.outerHTML = '<section class="cta-section"><div class="cta-wave"><svg viewBox="0 0 1440 60" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" aria-hidden="true"><path d="M0,0 C360,60 1080,0 1440,40 L1440,0 L0,0 Z" fill="white"/></svg></div><div class="container"><div class="cta-inner"><div class="chip cta-chip" style="background:rgba(255,255,255,.15);border-color:rgba(255,255,255,.25);color:#fff;margin:0 auto 20px"><span class="dot"></span> Free Estimate - Same Day Available</div><h2 class="title white center">Your Door Fixed.<br/><em>Today.</em></h2><p class="lead center cta-lead" style="color:#fff;margin:16px auto 0">Flat-rate pricing. Bilingual. Licensed & insured. No surprises.</p><div class="cta-phones"><a href="tel:' + PHONE_TEL + '" class="cta-phone"><div class="cta-phone-area">One Number for South Florida</div><div class="cta-phone-num">' + PHONE_DISPLAY + '</div></a></div><p class="cta-note">Mon-Sat 7am-8pm &middot; Emergency 24/7 &middot; Text OK &middot; Se Habla Espa&ntilde;ol</p></div></div></section>';
+  }
+
+  function directImagePath(value) {
+    if (!value) return '';
+    var cleaned = String(value).split('?')[0];
+    cleaned = cleaned.replace(/^\/cdn-cgi\/image\/[^/]+\//, '/');
+    cleaned = cleaned.replace(/^https?:\/\/[^/]+/i, '');
+    var match = cleaned.match(/\/images\/(\d+)\.(jpe?g|png|webp|avif)$/i);
+    return match ? '/images/' + match[1] + '.' + match[2] : cleaned;
+  }
+
+  function loadImage(img, src) {
+    if (!img || !src) return;
+    img.src = src;
+    img.removeAttribute('data-src');
+    img.classList.add('cs-loaded');
+    img.style.filter = 'none';
+    img.style.opacity = '1';
+  }
+
+  function fixPhotoPlaceholders() {
+    document.querySelectorAll('img[data-src]').forEach(function (img) {
+      loadImage(img, directImagePath(img.getAttribute('data-src')));
+    });
+
+    document.querySelectorAll('img[data-photo]').forEach(function (img) {
+      if (img.getAttribute('data-src')) return;
+      var n = img.getAttribute('data-photo');
+      var map = { '1': 'JPEG', '2': 'JPEG', '3': 'JPEG', '4': 'jpg', '5': 'jpg', '6': 'jpg', '7': 'jpg', '8': 'jpg', '9': 'jpg', '10': 'jpg' };
+      loadImage(img, '/images/' + n + '.' + (map[n] || 'jpg'));
+    });
   }
 
   function ensureTextFloat() {
@@ -158,12 +150,7 @@
   }
 
   function replacePhoneText(text) {
-    return text.replace(/\+1-305-555-7543/g, PHONE_TEL).replace(/\+13055557543/g, PHONE_TEL)
-      .replace(/13055557543/g, PHONE_WA).replace(/3055557543/g, PHONE_WA)
-      .replace(/\(305\) 555-7543/g, PHONE_DISPLAY).replace(/\(954\) 555-7543/g, PHONE_DISPLAY)
-      .replace(/\(561\) 555-7543/g, PHONE_DISPLAY).replace(/305-555-7543/g, '786-659-3290')
-      .replace(/954-555-7543/g, '786-659-3290').replace(/561-555-7543/g, '786-659-3290')
-      .replace(/305\.555\.7543/g, '786.659.3290');
+    return text.replace(/\+1-305-555-7543/g, PHONE_TEL).replace(/\+13055557543/g, PHONE_TEL).replace(/13055557543/g, PHONE_WA).replace(/3055557543/g, PHONE_WA).replace(/\(305\) 555-7543/g, PHONE_DISPLAY).replace(/\(954\) 555-7543/g, PHONE_DISPLAY).replace(/\(561\) 555-7543/g, PHONE_DISPLAY).replace(/305-555-7543/g, '786-659-3290').replace(/954-555-7543/g, '786-659-3290').replace(/561-555-7543/g, '786-659-3290').replace(/305\.555\.7543/g, '786.659.3290');
   }
 
   function normalizePhones() {
@@ -185,9 +172,7 @@
 
   function prepareForms() {
     document.querySelectorAll('select').forEach(function (select) {
-      Array.from(select.options).forEach(function (option) {
-        if (/florida keys|key largo|key west|islamorada|marathon/i.test(option.textContent)) option.remove();
-      });
+      Array.from(select.options).forEach(function (option) { if (/florida keys|key largo|key west|islamorada|marathon/i.test(option.textContent)) option.remove(); });
     });
     document.querySelectorAll('form').forEach(function (form, formIndex) {
       if (!form.id) form.id = 'contact-form-' + formIndex;
@@ -196,27 +181,15 @@
       form.setAttribute('accept-charset', 'UTF-8');
       if (!form.querySelector('input[name="company"]')) {
         var trap = document.createElement('input');
-        trap.type = 'text'; trap.name = 'company'; trap.autocomplete = 'off'; trap.tabIndex = -1;
-        trap.setAttribute('aria-hidden', 'true'); trap.style.cssText = 'position:absolute;left:-9999px;opacity:0';
+        trap.type = 'text'; trap.name = 'company'; trap.autocomplete = 'off'; trap.tabIndex = -1; trap.setAttribute('aria-hidden', 'true'); trap.style.cssText = 'position:absolute;left:-9999px;opacity:0';
         form.insertBefore(trap, form.firstChild);
       }
       if (!form.querySelector('[name="source_page"]')) {
-        var source = document.createElement('input');
-        source.type = 'hidden'; source.name = 'source_page'; source.value = window.location.href;
-        form.appendChild(source);
+        var source = document.createElement('input'); source.type = 'hidden'; source.name = 'source_page'; source.value = window.location.href; form.appendChild(source);
       }
       if (!form.querySelector('[name="problem"]')) {
-        var problem = document.createElement('input');
-        problem.type = 'hidden'; problem.name = 'problem'; problem.value = 'Website contact request';
-        form.appendChild(problem);
+        var problem = document.createElement('input'); problem.type = 'hidden'; problem.name = 'problem'; problem.value = 'Website contact request'; form.appendChild(problem);
       }
-      form.querySelectorAll('.form-field').forEach(function (field, fieldIndex) {
-        var label = field.querySelector('label');
-        var control = field.querySelector('input,select,textarea');
-        if (!control) return;
-        if (!control.id) control.id = 'cs-field-' + formIndex + '-' + fieldIndex;
-        if (label) label.setAttribute('for', control.id);
-      });
     });
   }
 
@@ -231,49 +204,19 @@
         var status = form.querySelector('.form-success') || document.getElementById('form-success');
         var original = btn ? (btn.textContent || btn.value || 'Send Request') : 'Send Request';
         if (status) { status.style.display = 'none'; status.classList.remove('form-error'); }
-        if (btn) {
-          if (btn.tagName === 'INPUT') btn.value = 'Sending request...'; else btn.textContent = 'Sending request...';
-          btn.disabled = true;
-        }
+        if (btn) { if (btn.tagName === 'INPUT') btn.value = 'Sending request...'; else btn.textContent = 'Sending request...'; btn.disabled = true; }
         try {
           var response = await fetch('/api/contact', { method: 'POST', headers: { Accept: 'application/json' }, body: new FormData(form) });
-          var result = {};
-          try { result = await response.json(); } catch (jsonError) {}
+          var result = {}; try { result = await response.json(); } catch (jsonError) {}
           if (!response.ok || !result.ok) throw new Error('Contact request failed');
-          if (btn) {
-            if (btn.tagName === 'INPUT') btn.value = 'Sent'; else btn.textContent = 'Sent. We will contact you shortly.';
-            btn.style.background = '#27AE60';
-          }
+          if (btn) { if (btn.tagName === 'INPUT') btn.value = 'Sent'; else btn.textContent = 'Sent. We will contact you shortly.'; btn.style.background = '#27AE60'; }
           if (status) { status.textContent = 'Thank you. Your request was sent and CoastSlide will contact you shortly.'; status.style.display = 'block'; }
           form.reset();
         } catch (error) {
-          if (btn) {
-            if (btn.tagName === 'INPUT') btn.value = original; else btn.textContent = original;
-            btn.disabled = false;
-          }
+          if (btn) { if (btn.tagName === 'INPUT') btn.value = original; else btn.textContent = original; btn.disabled = false; }
           if (status) { status.textContent = 'The form could not be sent right now. Please call or text ' + PHONE_DISPLAY + '.'; status.classList.add('form-error'); status.style.display = 'block'; }
         }
       }, true);
-    });
-  }
-
-  function resolveNumberedPhotos() {
-    var extensions = ['avif', 'webp', 'png', 'jpeg', 'jpg', 'AVIF', 'WEBP', 'PNG', 'JPEG', 'JPG'];
-    var cache = {};
-    function canLoad(url) {
-      if (!cache[url]) cache[url] = new Promise(function (resolve) {
-        var img = new Image(); img.onload = function () { resolve(true); }; img.onerror = function () { resolve(false); };
-        img.src = url + (url.indexOf('?') === -1 ? '?' : '&') + 'v=photos';
-      });
-      return cache[url];
-    }
-    document.querySelectorAll('img[src*="/images/"], img[src*="images/"]').forEach(function (img) {
-      var src = img.getAttribute('src') || '';
-      var match = src.match(/^(.*\/images\/)(\d+)\.(?:jpg|jpeg|png|webp|avif)(\?.*)?$/i);
-      if (!match) return;
-      var base = match[1], number = match[2], current = src.split('?')[0];
-      var candidates = extensions.map(function (ext) { return base + number + '.' + ext; });
-      (async function () { for (var i = 0; i < candidates.length; i += 1) { if (await canLoad(candidates[i])) { if (current !== candidates[i]) img.src = candidates[i]; return; } } })();
     });
   }
 
@@ -282,15 +225,10 @@
     var rpKeys = document.getElementById('rp-keys');
     if (rpKeys) rpKeys.remove();
     document.querySelectorAll('.rtab,.ps-cell,.blog-card,.rc,.related-services a').forEach(function (node) {
-      if (patterns.test(node.textContent) || patterns.test(node.getAttribute('href') || '') || patterns.test(node.querySelector('img') ? node.querySelector('img').alt : '')) node.remove();
+      var img = node.querySelector ? node.querySelector('img') : null;
+      if (patterns.test(node.textContent) || patterns.test(node.getAttribute('href') || '') || patterns.test(img ? img.alt : '')) node.remove();
     });
     document.querySelectorAll('a[href*="florida-keys"],a[href*="keys-corrosion"]').forEach(function (node) { node.remove(); });
-    document.querySelectorAll('script[type="application/ld+json"]').forEach(function (node) {
-      if (patterns.test(node.textContent)) node.textContent = node.textContent.replace(/,"Florida Keys"|"Florida Keys",/g, '');
-    });
-    document.querySelectorAll('.faq-a').forEach(function (node) {
-      node.textContent = node.textContent.replace('We cover all of Miami-Dade, Broward, and Palm Beach counties from Homestead to Jupiter — plus the Florida Keys.', 'We cover Miami-Dade, Broward, and Palm Beach counties from Homestead to Jupiter.');
-    });
   }
 
   function ensureMainLandmark() {
@@ -326,17 +264,15 @@
     if (tabs[index]) tabs[index].classList.add('active');
   };
 
-  installDesignFixes();
-  buildNav();
-  buildFooter();
-  buildTrust();
-  buildCta();
-
-  document.addEventListener('DOMContentLoaded', function () {
+  function boot() {
+    buildNav();
+    buildFooter();
+    buildTrust();
+    buildCta();
     ensureTextFloat();
     removeKeysContent();
     ensureMainLandmark();
-    resolveNumberedPhotos();
+    fixPhotoPlaceholders();
     normalizePhones();
     prepareForms();
     wireContactForms();
@@ -353,5 +289,11 @@
       }, { threshold: 0.08 });
       document.querySelectorAll('.reveal').forEach(function (el) { io.observe(el); });
     } else document.querySelectorAll('.reveal').forEach(function (el) { el.classList.add('visible'); });
-  });
+    setTimeout(fixPhotoPlaceholders, 250);
+    setTimeout(fixPhotoPlaceholders, 1200);
+  }
+
+  installDesignFixes();
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
 })();
