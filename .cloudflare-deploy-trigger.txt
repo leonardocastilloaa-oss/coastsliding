@@ -1,3 +1,3 @@
-Trigger deploy after removing region photos from served HTML and forcing Cloudflare image optimization URLs.
-Timestamp: 2026-05-20T07:05:00Z
-Commit with Worker fixes: 66fdcac5843059fe8bdc70dcf941d23e8ad32b51
+Trigger deploy after removing region images from index.html and all photos from blog listing.
+Timestamp: 2026-05-20T07:25:00Z
+Commit with source removals: 9b06d5168b18122dffa556c32e68056d85e5591b
