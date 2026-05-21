@@ -1,3 +1,4 @@
-Trigger deploy after removing region images from index.html and all photos from blog listing.
-Timestamp: 2026-05-20T07:25:00Z
-Commit with source removals: 9b06d5168b18122dffa556c32e68056d85e5591b
+Trigger deploy after PageSpeed image and cache optimization.
+Timestamp: 2026-05-20T22:30:00Z
+Worker commit: 12e9156e038a8757a9c81a0aa002295a5c4f41a3
+Changes: HTML-only rewriting, long cache for CSS/JS, deferred homepage images 2-10.
