@@ -5,6 +5,8 @@ const OLD_HOSTS = new Set(['coastsliding.com', 'www.coastsliding.com', 'www.coas
 const CONTACT_EMAIL = 'coastsliding@gmail.com';
 const FROM_EMAIL = 'forms@coastslide.com';
 const PHONE_DISPLAY = '(786) 659-3290';
+const PHONE_TEL = '+17866593290';
+const PHONE_WA = '17866593290';
 
 function clean(value) {
   return String(value || '').replace(/[\r\n]+/g, ' ').trim().slice(0, 1200);
@@ -157,6 +159,25 @@ function hardenForms(html) {
   });
 }
 
+function singleContactPhoneBlock() {
+  return '<div class="contact-info-phones contact-one-number" style="display:grid;gap:14px;max-width:540px">' +
+    '<a href="tel:' + PHONE_TEL + '" class="phone-card contact-main-phone" style="display:block;padding:22px;border:1px solid #B8D6ED;border-radius:14px;background:#fff;box-shadow:0 8px 28px rgba(11,98,141,.10);text-decoration:none">' +
+      '<div><div class="pc-area" style="color:#084F73;font-weight:900;letter-spacing:1.4px;text-transform:uppercase;font-size:12px">One Number for South Florida</div>' +
+      '<div class="pc-num" style="font-size:clamp(28px,4vw,40px);line-height:1.1;font-weight:950;color:#073F5F;margin:7px 0 6px">' + PHONE_DISPLAY + '</div>' +
+      '<div class="pc-note" style="color:#2D4B60;font-size:14px;line-height:1.55">Miami-Dade, Broward and Palm Beach. Call, text or WhatsApp the same number for every service area.</div></div>' +
+    '</a>' +
+    '<div class="contact-quick-actions" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px">' +
+      '<a href="tel:' + PHONE_TEL + '" class="btn btn-blue" style="justify-content:center;padding:13px 10px;text-align:center">Call Now</a>' +
+      '<a href="sms:' + PHONE_TEL + '" class="btn btn-outline" style="justify-content:center;padding:13px 10px;text-align:center">Text Us</a>' +
+      '<a href="https://wa.me/' + PHONE_WA + '" class="btn btn-wa" target="_blank" rel="noopener" style="justify-content:center;padding:13px 10px;text-align:center;color:#fff!important">WhatsApp</a>' +
+    '</div>' +
+  '</div>';
+}
+
+function simplifyContactPhones(html) {
+  return html.replace(/<div class="contact-info-phones">[\s\S]*?<div class="form-wrap">/i, singleContactPhoneBlock() + '</div><div class="form-wrap">');
+}
+
 function normalizeHtml(html) {
   let value = html
     .replace(/https:\/\/coastsliding\.com/g, 'https://coastslide.com')
@@ -184,6 +205,7 @@ function normalizeHtml(html) {
   value = value.replace(/src="data:image\/svg\+xml,[^"]+"\s+data-src="([^"]+)"/g, 'src="$1"');
   value = value.replace(/\sdata-src="[^"]+"/g, '');
   value = value.replace(/class="cs-lazy-img"/g, 'class="cs-lazy-img cs-loaded"');
+  value = simplifyContactPhones(value);
   value = hardenForms(value);
   return value;
 }
