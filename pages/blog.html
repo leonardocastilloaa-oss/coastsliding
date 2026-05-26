@@ -15,7 +15,7 @@
 <meta property="og:url" content="https://coastslide.com/pages/blog.html"/>
 <link rel="stylesheet" href="../css/style.css"/>
 <style>
-.blog-text-hero{background:linear-gradient(135deg,#073F5F 0%,#084F73 56%,#087D87 100%);padding:150px 0 90px;color:#fff;position:relative;overflow:hidden}.blog-text-hero:after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:46px;background:#fff;clip-path:polygon(0 55%,100% 10%,100% 100%,0 100%)}.blog-text-hero .breadcrumb,.blog-text-hero .breadcrumb a,.blog-text-hero .page-sub{color:#fff!important}.blog-seo-intro{background:#fff;padding:58px 0 30px}.blog-seo-intro .lead{max-width:900px}.soro-blog-section{background:#fff;padding:42px 0 56px}.soro-blog-shell{border:1px solid #D8E8F2;border-radius:8px;background:#fff;box-shadow:0 12px 38px rgba(7,63,95,.08);padding:22px}.blog-grid.no-photos{align-items:stretch}.blog-grid.no-photos .blog-card{display:flex;flex-direction:column;min-height:260px}.blog-grid.no-photos .blog-body{padding:28px;display:flex;flex-direction:column;flex:1}.blog-grid.no-photos .blog-link{margin-top:auto}.blog-pill{display:inline-flex;align-self:flex-start;margin-bottom:14px;padding:7px 10px;border-radius:999px;background:#EAF6FB;color:#084F73;font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:.9px}@media(max-width:640px){.blog-text-hero{padding:130px 0 70px}.blog-grid.no-photos .blog-body{padding:22px}.soro-blog-shell{padding:14px}}
+.blog-text-hero{background:linear-gradient(135deg,#073F5F 0%,#084F73 56%,#087D87 100%);padding:150px 0 90px;color:#fff;position:relative;overflow:hidden}.blog-text-hero:after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:46px;background:#fff;clip-path:polygon(0 55%,100% 10%,100% 100%,0 100%)}.blog-text-hero .breadcrumb,.blog-text-hero .breadcrumb a,.blog-text-hero .page-sub{color:#fff!important}.blog-seo-intro{background:#fff;padding:58px 0 30px}.blog-seo-intro .lead{max-width:900px}.soro-blog-section{background:#fff;padding:42px 0 56px}.soro-blog-shell{border:1px solid #D8E8F2;border-radius:8px;background:#fff;box-shadow:0 12px 38px rgba(7,63,95,.08);padding:22px}.soro-fallback-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.soro-fallback-card{display:block;border:1px solid #D8E8F2;border-radius:8px;padding:20px;background:#F7FCFF;color:#073F5F;text-decoration:none;transition:.2s ease}.soro-fallback-card:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(7,63,95,.12)}.soro-fallback-card strong{display:block;font-size:18px;line-height:1.25;margin-bottom:8px;color:#073F5F}.soro-fallback-card span{display:block;color:#486777;line-height:1.55}.blog-grid.no-photos{align-items:stretch}.blog-grid.no-photos .blog-card{display:flex;flex-direction:column;min-height:260px}.blog-grid.no-photos .blog-body{padding:28px;display:flex;flex-direction:column;flex:1}.blog-grid.no-photos .blog-link{margin-top:auto}.blog-pill{display:inline-flex;align-self:flex-start;margin-bottom:14px;padding:7px 10px;border-radius:999px;background:#EAF6FB;color:#084F73;font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:.9px}@media(max-width:760px){.soro-fallback-grid{grid-template-columns:1fr}}@media(max-width:640px){.blog-text-hero{padding:130px 0 70px}.blog-grid.no-photos .blog-body{padding:22px}.soro-blog-shell{padding:14px}}
 </style>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"Blog","name":"CoastSlide Sliding Door and Window Repair Blog","url":"https://coastslide.com/pages/blog.html","publisher":{"@type":"LocalBusiness","name":"CoastSlide","telephone":"+17866593290","areaServed":["Miami-Dade County","Broward County","Palm Beach County"]},"about":["Sliding door repair","Sliding door roller replacement","Impact glass repair","Window repair","Sliding door lock repair","Track repair"]}</script>
 </head>
@@ -44,6 +44,11 @@
     <div class="soro-blog-shell">
       <div id="soro-blog"></div>
       <script src="https://app.trysoro.com/api/embed/d18c1359-3a6c-4693-8e1e-7a5b997f76db" defer></script>
+      <div class="soro-fallback-grid" id="soro-fallback-guides">
+        <a class="soro-fallback-card" href="blog/sliding-door-hard-to-open.html"><strong>Why a Sliding Door Gets Hard to Open</strong><span>Roller wear, dirty tracks, panel alignment and signs it is time to schedule repair.</span></a>
+        <a class="soro-fallback-card" href="blog/hurricane-season-door-checklist.html"><strong>Hurricane Season Sliding Door Checklist</strong><span>Storm-season checks for locks, impact glass, drainage and weatherstripping.</span></a>
+        <a class="soro-fallback-card" href="blog/impact-window-fogging.html"><strong>What Foggy Impact Windows Mean</strong><span>How seal failure, moisture and haze affect South Florida impact glass.</span></a>
+      </div>
       <noscript><p class="lead">JavaScript is required to load the latest CoastSlide blog articles.</p></noscript>
     </div>
   </div>
@@ -68,6 +73,21 @@
 </section>
 <div id="cta-section"></div>
 <footer id="footer"></footer>
+<script>
+(function(){
+  function cleanSoroEmptyState(){
+    var soro = document.getElementById('soro-blog');
+    var fallback = document.getElementById('soro-fallback-guides');
+    if(!soro || !fallback) return;
+    var text = (soro.textContent || '').toLowerCase();
+    var hasRealArticle = !!soro.querySelector('a[href], article, .post, .blog, [class*="card"]');
+    if(hasRealArticle){ fallback.style.display = 'none'; return; }
+    if(text.indexOf('published articles may take') !== -1 || text.indexOf('60 minutes') !== -1){ soro.innerHTML = ''; }
+    fallback.style.display = 'grid';
+  }
+  window.addEventListener('load', function(){ setTimeout(cleanSoroEmptyState, 1800); setTimeout(cleanSoroEmptyState, 4500); });
+})();
+</script>
 <script src="../js/components.js"></script>
 </body>
 </html>
