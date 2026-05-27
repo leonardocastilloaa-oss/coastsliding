@@ -1,4 +1,3 @@
-Trigger deploy after contact phone block redesign.
-Timestamp: 2026-05-21T09:15:00Z
-Commit: 5dbd239a9cd40b5b1fc6bf11fd19ad53cea9c9f8
-Changes: Homepage Free Estimate section now shows one South Florida number instead of repeated county phone cards.
+Trigger Google tag application across all HTML pages.
+Timestamp: 2026-05-27T01:20:00Z
+Changes: Run GitHub workflow to add the exact Google tag after the head element on every HTML page.
