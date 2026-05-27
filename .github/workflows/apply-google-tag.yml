@@ -1,0 +1,34 @@
+name: Apply Google tag to every HTML page
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  apply-google-tag:
+    runs-on: ubuntu-latest
+    if: github.actor != 'github-actions[bot]'
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Apply Google tag to all HTML pages
+        run: node scripts/apply-google-tag.mjs
+
+      - name: Commit Google tag changes
+        run: |
+          if git diff --quiet; then
+            echo "No HTML changes needed."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "*.html" "pages/**/*.html" "404.html"
+          git commit -m "Apply Google tag to every HTML page"
+          git push
