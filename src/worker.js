@@ -7,6 +7,16 @@ const FROM_EMAIL = 'forms@coastslide.com';
 const PHONE_DISPLAY = '(786) 659-3290';
 const PHONE_TEL = '+17866593290';
 const PHONE_WA = '17866593290';
+const GOOGLE_TAG_ID = 'G-29S24YXK2D';
+const GOOGLE_TAG = `<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=${GOOGLE_TAG_ID}"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', '${GOOGLE_TAG_ID}');
+</script>`;
 
 function clean(value) {
   return String(value || '').replace(/[\r\n]+/g, ' ').trim().slice(0, 1200);
@@ -159,6 +169,11 @@ function hardenForms(html) {
   });
 }
 
+function installGoogleTag(html) {
+  if (html.includes(GOOGLE_TAG_ID) || html.includes('googletagmanager.com/gtag/js')) return html;
+  return html.replace(/<head(\s[^>]*)?>/i, (match) => match + '\n' + GOOGLE_TAG);
+}
+
 function singleContactPhoneBlock() {
   return '<div class="contact-info-phones contact-one-number" style="display:grid;gap:14px;max-width:540px">' +
     '<a href="tel:' + PHONE_TEL + '" class="phone-card contact-main-phone" style="display:block;padding:22px;border:1px solid #B8D6ED;border-radius:14px;background:#fff;box-shadow:0 8px 28px rgba(11,98,141,.10);text-decoration:none">' +
@@ -179,7 +194,7 @@ function simplifyContactPhones(html) {
 }
 
 function normalizeHtml(html) {
-  let value = html
+  let value = installGoogleTag(html)
     .replace(/https:\/\/coastsliding\.com/g, 'https://coastslide.com')
     .replace(/http:\/\/coastsliding\.com/g, 'https://coastslide.com')
     .replace(/www\.coastsliding\.com/g, 'coastslide.com')
